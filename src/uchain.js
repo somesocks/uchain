@@ -51,6 +51,8 @@ const InSeries = (...handlers) => (next, ...args) => {
 	worker(null, ...args);
 };
 
+const PassThrough = (next, ...args) => next(null, ...args);
+
 const CatchError = (handler) => (next, ...args) => {
 	handler(
 		(...a) => next(null, ...a),
@@ -67,5 +69,6 @@ module.exports = {
 	InSeries,
 	InParallel,
 	CatchError,
-	Logging
+	Logging,
+	PassThrough,
 }
