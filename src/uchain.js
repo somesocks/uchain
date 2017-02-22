@@ -7,7 +7,7 @@ const defer = setImmediate;
 
 const InParallel = (...handlers) => {
 	if (handlers.length === 0) {
-		return PassThrough;
+		return (next) => next();
 	} else {
 		return (next, ...args) => {
 			next = once(next);
@@ -38,7 +38,7 @@ const InParallel = (...handlers) => {
 
 const InSeries = (...handlers) => {
 	if(handlers.length === 0) {
-		return PassThrough;
+		return (next) => next();
 	} else {
 		return (next, ...args) => {
 			next = once(next);
