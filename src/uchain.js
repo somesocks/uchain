@@ -1,14 +1,11 @@
 
+require("setimmediate");
 
 const NOP = () => {};
 
-const once = (f) => {
-	return (...args) => {
-		f(...args); f = NOP;
-	};
-};
+const once = (f) => (...args) => f = f != null ? f(...args) : null;
 
-const defer = (f, ...args) => { setTimeout(f, 0, ...args); };
+const defer = setImmediate;
 
 const InParallel = (...handlers) => (next, ...args) => {
 	next = once(next || NOP);
@@ -38,10 +35,8 @@ const InSeries = (...handlers) => (next, ...args) => {
 
 	let index = 0;
 	const worker = (err, ...res) => {
-		if (err) {
-			next(err);
-		} else if (index >= handlers.length) {
-			next(null, ...res);
+		if (err || index >= handlers.length) {
+			next(err, ...res);
 		} else {
 			const handler = handlers[index++];
 			defer(handler, once(worker), ...res);
