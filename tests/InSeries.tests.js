@@ -12,4 +12,8 @@ describe('InSeries', () => {
 		chain(done, 1, 2, 3);
 	});
 
+	it('test with 0 handlers', (done) => {
+		InSeries()(done);
+	});
+
 });

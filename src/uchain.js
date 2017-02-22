@@ -5,45 +5,57 @@ const once = (f) => (...args) => f = f != null ? f(...args) : null;
 
 const defer = setImmediate;
 
-const InParallel = (...handlers) => (next, ...args) => {
-	next = once(next);
+const InParallel = (...handlers) => {
+	if (handlers.length === 0) {
+		return PassThrough;
+	} else {
+		return (next, ...args) => {
+			next = once(next);
 
-	let done = 0;
-	const results = [];
+			let done = 0;
+			const results = [];
 
-	for(let i = 0; i < handlers.length; i++) {
-		const h = handlers[i];
+			for(let i = 0; i < handlers.length; i++) {
+				const h = handlers[i];
 
-		const onDone = once((err, ...res) => {
-			if (err) {
-				next(err);
-			} else {
-				done++;
-				results[i] = res.length === 1 ? res[0] : res;
-				if (done === handlers.length) {
-					next(null, ...results);
-				}
+				const onDone = once((err, ...res) => {
+					if (err) {
+						next(err);
+					} else {
+						done++;
+						results[i] = res.length === 1 ? res[0] : res;
+						if (done === handlers.length) {
+							next(null, ...results);
+						}
+					}
+				});
+
+				defer(h, onDone, ...args);
 			}
-		});
-
-		defer(h, onDone, ...args);
+		};
 	}
 };
 
-const InSeries = (...handlers) => (next, ...args) => {
-	next = once(next);
+const InSeries = (...handlers) => {
+	if(handlers.length === 0) {
+		return PassThrough;
+	} else {
+		return (next, ...args) => {
+			next = once(next);
 
-	let index = 0;
-	const worker = (err, ...res) => {
-		if (err || index >= handlers.length) {
-			next(err, ...res);
-		} else {
-			const handler = handlers[index++];
-			defer(handler, once(worker), ...res);
-		}
-	};
+			let index = 0;
+			const worker = (err, ...res) => {
+				if (err || index >= handlers.length) {
+					next(err, ...res);
+				} else {
+					const handler = handlers[index++];
+					defer(handler, once(worker), ...res);
+				}
+			};
 
-	worker(null, ...args);
+			worker(null, ...args);
+		};
+	}
 };
 
 const PassThrough = (next, ...args) => next(null, ...args);

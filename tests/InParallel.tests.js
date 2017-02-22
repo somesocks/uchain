@@ -12,4 +12,8 @@ describe('InParallel', () => {
 		chain(done);
 	});
 
+	it('test with 0 handlers', (done) => {
+		InParallel()(done);
+	});
+
 });
