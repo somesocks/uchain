@@ -1,7 +1,12 @@
 
 require("setimmediate");
 
-const once = (f) => (...args) => f = f != null ? f(...args) : null;
+const nop = () => {};
+const once = (f) => (...args) => {
+	const temp = f;
+	f = nop;
+	temp(...args);
+};
 
 const defer = setImmediate;
 
@@ -18,7 +23,7 @@ const InParallel = (...handlers) => {
 			for(let i = 0; i < handlers.length; i++) {
 				const h = handlers[i];
 
-				const onDone = once((err, ...res) => {
+				const onDone = (err, ...res) => {
 					if (err) {
 						next(err);
 					} else {
@@ -28,9 +33,9 @@ const InParallel = (...handlers) => {
 							next(null, ...results);
 						}
 					}
-				});
+				};
 
-				defer(h, onDone, ...args);
+				defer(h, once(onDone), ...args);
 			}
 		};
 	}
