@@ -73,7 +73,7 @@ const CatchError = (handler) => (next, ...args) => {
 };
 
 const Logging = (tag) => (next, ...args) => {
-	console.log(tag, ...args);
+	console.log(tag, args);
 	next(null, ...args);
 };
 
