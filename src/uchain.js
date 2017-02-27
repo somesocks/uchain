@@ -3,7 +3,7 @@ require("setimmediate");
 
 const nop = () => {};
 const once = (f) => (...args) => {
-	const temp = f;
+	const temp = f || nop;
 	f = nop;
 	temp(...args);
 };

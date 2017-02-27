@@ -5,8 +5,7 @@ describe('InSeries', () => {
 
 	it('Long Chain Performance', (done) => {
 		const chain = InSeries(
-			...Array(100000).fill(PassThrough),
-			Logging('end')
+			...Array(100000).fill(PassThrough)
 		);
 
 		chain(done, 1, 2, 3);
@@ -15,5 +14,21 @@ describe('InSeries', () => {
 	it('test with 0 handlers', (done) => {
 		InSeries()(done);
 	});
+
+	it('test with null return', (done) => {
+		InSeries(
+			(next) => next(),
+			(next) => next()
+		)(done);
+	});
+
+	it('test with null callback', (done) => {
+		InSeries(
+			(next) => next(),
+			(next) => next()
+		)();
+		setTimeout(done, 100);
+	});
+
 
 });
