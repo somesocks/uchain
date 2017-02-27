@@ -28,7 +28,7 @@ const InParallel = (...handlers) => {
 						next(err);
 					} else {
 						done++;
-						results[i] = res.length === 1 ? res[0] : res;
+						results[i] = res;
 						if (done === handlers.length) {
 							next(null, ...results);
 						}
