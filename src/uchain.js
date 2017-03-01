@@ -77,12 +77,15 @@ const InSeries = (...handlers) => {
 
 const PassThrough = (next, ...args) => next(null, ...args);
 
-const CatchError = (handler) => (next, ...args) => {
-	handler(
-		(...a) => next(null, ...a),
-		...args
-	);
-};
+const CatchError = (handler) => {
+	handler = catchWrapper(handler);
+	return (next, ...args) => {
+		handler(
+			(...a) => next(null, ...a),
+			...args
+		);
+	};
+}
 
 const Logging = (tag) => (next, ...args) => {
 	console.log(tag, args);
