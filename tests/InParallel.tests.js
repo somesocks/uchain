@@ -30,4 +30,11 @@ describe('InParallel', () => {
 		setTimeout(done, 100);
 	});
 
+	it('catches errors', (done) => {
+		InParallel(
+			(next) => next(),
+			(next) => { throw new Error('error'); }
+		)((err, res) => done(err != null ? null : err));
+	})
+
 });

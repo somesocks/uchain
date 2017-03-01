@@ -10,10 +10,20 @@ const once = (f) => (...args) => {
 
 const defer = setImmediate;
 
+const catchWrapper = (h) => (next, ...rest) => {
+	try {
+		h(next, ...rest);
+	} catch(err) {
+		next(err);
+	}
+};
+
 const InParallel = (...handlers) => {
 	if (handlers.length === 0) {
 		return (next) => next();
 	} else {
+		handlers = handlers.map(catchWrapper);
+
 		return (next, ...args) => {
 			next = once(next);
 
@@ -45,6 +55,8 @@ const InSeries = (...handlers) => {
 	if(handlers.length === 0) {
 		return (next) => next();
 	} else {
+		handlers = handlers.map(catchWrapper);
+
 		return (next, ...args) => {
 			next = once(next);
 

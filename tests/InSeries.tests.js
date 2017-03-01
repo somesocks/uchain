@@ -30,5 +30,11 @@ describe('InSeries', () => {
 		setTimeout(done, 100);
 	});
 
+	it('catches errors', (done) => {
+		InSeries(
+			(next) => next(),
+			(next) => { throw new Error('error'); }
+		)((err, res) => done(err != null ? null : err));
+	})
 
 });
