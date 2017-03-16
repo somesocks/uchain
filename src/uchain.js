@@ -1,4 +1,3 @@
-
 require("setimmediate");
 
 const nop = () => {};
@@ -80,6 +79,7 @@ const PassThrough = (next, ...args) => next(null, ...args);
 const CatchError = (handler) => {
 	handler = catchWrapper(handler);
 	return (next, ...args) => {
+		// next = once(next);
 		handler(
 			(...a) => next(null, ...a),
 			...args
