@@ -92,10 +92,46 @@ const Logging = (tag) => (next, ...args) => {
 	next(null, ...args);
 };
 
+const ParallelForEach = (toCall) => (next, ...args) => {
+	const tasks = args.map((arg) => (next) => tocall(next, arg));
+
+	InSeries(
+		InParallel(
+			...tasks
+		),
+		(next) => next()
+	)(next);
+}
+
+const ParallelMap = (map) => (next, ...args) => {
+	const tasks = args.map((arg, i) => (next) => map(next, arg, i));
+
+	InSeries(
+		InParallel(...tasks),
+		(next, ...results) => {
+			results = results.map((r) => r[0]);
+			next(null, ...results);
+		}
+	)(next);
+}
+
+const ParallelFilter = (filter) => (next, ...args) => {
+	InSeries(
+		ParallelMap(filter),
+		(next, ...booleans) => {
+			const results = args.filter((r, i) => booleans[i]);
+			next(null, ...results);
+		}
+	)(next);
+}
+
 module.exports = {
 	InSeries,
 	InParallel,
 	CatchError,
 	Logging,
 	PassThrough,
+	ParallelForEach,
+	ParallelMap,
+	ParallelFilter,
 }
