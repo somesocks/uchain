@@ -27,7 +27,7 @@ describe('InSeries', () => {
 			(next) => next(),
 			(next) => next()
 		)();
-		setTimeout(done, 100);
+		setTimeout(done, 16);
 	});
 
 	it('catches errors', (done) => {

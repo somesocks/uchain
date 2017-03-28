@@ -115,3 +115,11 @@ If you need to catch an error explicitly at some point, wrap a link in CatchErro
 Sometimes, you need to pass previous arguments along with a new result.  The easiest way to do this is to use PassThrough, whchich is a convenience method for
 
     (next, ...args) => next(null, ...args),
+
+### Logging
+
+Logging is useful for debugging.  It prints all of the arguments passed in to console.log, with a tag, and then passes them through.
+
+### Assert
+
+Assert is useful for debugging.  It takes in a validator function, which is then passed any arguments to check.  If validator returns false, an error is thrown.

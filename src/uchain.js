@@ -92,6 +92,16 @@ const Logging = (tag) => (next, ...args) => {
 	next(null, ...args);
 };
 
+const Assert = (validator, msg) => {
+	validator = validator || nop;
+	msg = msg || 'uchain assert failed';
+
+	return (next, ...args) => {
+		const err = validator(...args) ? null : new Error(msg);
+		next(err, ...args);
+	};
+};
+
 const ParallelForEach = (toCall) => (next, ...args) => {
 	const tasks = args.map((arg) => (next) => tocall(next, arg));
 
@@ -128,9 +138,10 @@ const ParallelFilter = (filter) => (next, ...args) => {
 module.exports = {
 	InSeries,
 	InParallel,
+	PassThrough,
 	CatchError,
 	Logging,
-	PassThrough,
+	Assert,
 	ParallelForEach,
 	ParallelMap,
 	ParallelFilter,
