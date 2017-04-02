@@ -1,4 +1,4 @@
-require("setimmediate");
+require('setimmediate');
 
 const nop = () => {};
 const once = (f) => (...args) => {
@@ -12,7 +12,7 @@ const defer = setImmediate;
 const catchWrapper = (h) => (next, ...rest) => {
 	try {
 		h(next, ...rest);
-	} catch(err) {
+	} catch (err) {
 		next(err);
 	}
 };
@@ -29,7 +29,7 @@ const InParallel = (...handlers) => {
 			let done = 0;
 			const results = [];
 
-			for(let i = 0; i < handlers.length; i++) {
+			for (let i = 0; i < handlers.length; i++) {
 				const h = handlers[i];
 
 				const onDone = (err, ...res) => {
@@ -51,7 +51,7 @@ const InParallel = (...handlers) => {
 };
 
 const InSeries = (...handlers) => {
-	if(handlers.length === 0) {
+	if (handlers.length === 0) {
 		return (next) => next();
 	} else {
 		handlers = handlers.map(catchWrapper);
@@ -85,7 +85,7 @@ const CatchError = (handler) => {
 			...args
 		);
 	};
-}
+};
 
 const Logging = (tag) => (next, ...args) => {
 	console.log(tag, args);
@@ -103,7 +103,7 @@ const Assert = (validator, msg) => {
 };
 
 const ParallelForEach = (toCall) => (next, ...args) => {
-	const tasks = args.map((arg) => (next) => tocall(next, arg));
+	const tasks = args.map((arg) => (next) => toCall(next, arg));
 
 	InSeries(
 		InParallel(
@@ -111,7 +111,7 @@ const ParallelForEach = (toCall) => (next, ...args) => {
 		),
 		(next) => next()
 	)(next);
-}
+};
 
 const ParallelMap = (map) => (next, ...args) => {
 	const tasks = args.map((arg, i) => (next) => map(next, arg, i));
@@ -123,7 +123,7 @@ const ParallelMap = (map) => (next, ...args) => {
 			next(null, ...results);
 		}
 	)(next);
-}
+};
 
 const ParallelFilter = (filter) => (next, ...args) => {
 	InSeries(
@@ -133,7 +133,77 @@ const ParallelFilter = (filter) => (next, ...args) => {
 			next(null, ...results);
 		}
 	)(next);
-}
+};
+
+const ParallelObjectMap = (mapping) => {
+	mapping = catchWrapper(mapping);
+
+	return (next, obj) => {
+		next = once(next);
+
+		let left = 0;
+		const results = {};
+
+		for (let key in obj) {
+			if (obj.hasOwnProperty(key)) {
+				left++;
+				const val = obj[key];
+
+				const onDone = (err, newVal) => {
+					if (err) {
+						next(err);
+					} else {
+						results[key] = newVal;
+						left--;
+						if (left === 0) {
+							next(null, results);
+						}
+					}
+				};
+
+				defer(mapping, once(onDone), key, val);
+			}
+		}
+
+		// catch for empty object
+		if (left === 0) { next(null, {}); }
+	};
+};
+
+const ParallelObjectFilter = (mapping) => {
+	mapping = catchWrapper(mapping);
+
+	return (next, obj) => {
+		next = once(next);
+
+		let left = 0;
+		const results = {};
+
+		for (let key in obj) {
+			if (obj.hasOwnProperty(key)) {
+				left++;
+				const val = obj[key];
+
+				const onDone = (err, pass) => {
+					if (err) {
+						next(err);
+					} else {
+						if (pass) { results[key] = val; }
+						left--;
+						if (left === 0) {
+							next(null, results);
+						}
+					}
+				};
+
+				defer(mapping, once(onDone), key, val);
+			}
+		}
+
+		// catch for empty object
+		if (left === 0) { next(null, {}); }
+	};
+};
 
 module.exports = {
 	InSeries,
@@ -145,4 +215,6 @@ module.exports = {
 	ParallelForEach,
 	ParallelMap,
 	ParallelFilter,
-}
+	ParallelObjectMap,
+	ParallelObjectFilter,
+};
