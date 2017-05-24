@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 
 const { Assert, InSeries, InParallel, PassThrough, Logging, CatchError } = require('../dist/uchain');
 
