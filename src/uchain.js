@@ -97,7 +97,7 @@ const Assert = (validator, msg) => {
 	msg = msg || 'uchain assert failed';
 
 	return (next, ...args) => {
-		const err = validator(args) ? null : new Error(`${msg}\nasrgs: ${JSON.stringify(args)}`);
+		const err = validator(args) ? null : new Error(`${msg}\nargs: ${JSON.stringify(args)}`);
 		next(err, ...args);
 	};
 };
