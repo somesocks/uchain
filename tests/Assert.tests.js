@@ -7,7 +7,6 @@ const { isBoolean, isNumber } = Valid;
 const { matches } = Valid.Object;
 
 describe('Assert', () => {
-
 	it('Assert 1', (done) => {
 		const chain = InSeries(
 			(next) => next(null, true),
@@ -21,5 +20,4 @@ describe('Assert', () => {
 			Assert(matches([ isNumber ]))
 		)((err) => done(err != null ? null : err));
 	});
-
 });

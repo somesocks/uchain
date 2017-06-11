@@ -1,11 +1,8 @@
+/* eslint-env mocha */
 
-const {
-	InSeries, InParallel, PassThrough, Logging,
-	ParallelFilter,
-} = require('../dist/uchain');
+const { InSeries, InParallel, PassThrough, Logging, ParallelFilter } = require('../dist/uchain');
 
 describe('ParallelFilter', () => {
-
 	it('ParallelFilter works', (done) => {
 		const task =
 			InSeries(
@@ -16,16 +13,15 @@ describe('ParallelFilter', () => {
 	});
 
 	it('test with 0 args', (done) => {
-		const task = ParallelFilter((next, item) => next(null, true))
+		const task = ParallelFilter((next, item) => next(null, true));
 		task(done);
 	});
 
 	it('catches errors', (done) => {
-		const task = ParallelFilter((next, item) => { throw new Error('error') })
+		const task = ParallelFilter((next, item) => { throw new Error('error'); });
 
 		const onDone = (err, res) => done(err != null ? null : err);
 
 		task(onDone, 1, 2, 3);
 	});
-
 });

@@ -1,8 +1,8 @@
+/* eslint-env mocha */
 
 const { InSeries, InParallel, PassThrough, Logging } = require('../dist/uchain');
 
 describe('InParallel', () => {
-
 	it('Parallel Performance', (done) => {
 		const chain = InSeries(
 			...Array(1000).fill(PassThrough)
@@ -35,6 +35,5 @@ describe('InParallel', () => {
 			(next) => next(),
 			(next) => { throw new Error('error'); }
 		)((err, res) => done(err != null ? null : err));
-	})
-
+	});
 });

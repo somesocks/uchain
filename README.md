@@ -80,6 +80,33 @@ InParallel accepts a number of functions, and returns a link function that execu
     chain(onDone); // prints out [ 1 ] [ 2 ] [ 3, 4 ], eventually
 ```
 
+### Race
+
+```javascript
+    let chain = Race(
+	    function(next, ...args) {},
+	    function(next, ...args) {},
+	    ...
+    );
+
+    chain(next, ...args);
+```
+
+Race accepts a number of functions, and returns a link function that executes all of its child links simultaneously.  The first result (or error) is returned, and the remaining results (or errors) are ignored.
+
+```javascript
+    let chain = Race(
+        (next) => next(null, 1),
+        (next) => setTimeout(next, 100, null, 2),
+        (next) => { throw new Error(); } ,
+    );
+
+	let onDone = (err, ...results) => console.log(results);
+
+    chain(onDone); // prints out [ 1 ], eventually
+```
+
+
 ### CatchError
 
 Error bypass the normal flow of execution.  They're always returned to the last link in the chain, even if they occur inside nested InSeries or InParallel chains.
