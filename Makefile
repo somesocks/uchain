@@ -12,4 +12,4 @@ build:
 	NODE_MODULES=. webpack --config=./webpack.js
 
 test:
-	(export NODE_PATH=./; find ./tests -name '*.tests.js' | xargs mocha --timeout 10000 $(ARGS))
+	(export NODE_PATH=./; find ./src -name '*.tests.js' | xargs mocha --timeout 10000 $(ARGS))

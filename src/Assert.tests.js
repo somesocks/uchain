@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 
-const { Assert, InSeries, InParallel, PassThrough, Logging, CatchError } = require('../dist/uchain');
+const { Assert, InSeries, InParallel, PassThrough, Logging, CatchError } = require('./');
 
 const Valid = require('simple-validator');
 const { isBoolean, isNumber } = Valid;

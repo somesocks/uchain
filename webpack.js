@@ -11,7 +11,7 @@ const plugins = [
 
 const CONFIG = {
 	entry: {
-		'uchain.js': [ './src/uchain.js' ],
+		'uchain.js': [ './src/index.js' ],
 	},
 	output: {
 		path: DIST_DIR,

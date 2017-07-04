@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 
-const { InSeries, InParallel, Race, PassThrough, Logging } = require('../dist/uchain');
+const { InSeries, InParallel, Race, PassThrough, Logging } = require('./');
 
 describe('Race', () => {
 	it('test with 0 handlers', (done) => {
