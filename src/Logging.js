@@ -1,5 +1,5 @@
 
-const { nop } = require('./_base');
+const { nop, noarr } = require('./_base');
 
 const isString = (val) => (typeof val === 'string') || (val instanceof String);
 
@@ -12,6 +12,7 @@ const Logging = (options = '') => {
 	const { tag, logger, logArgs } = options;
 
 	return (next, ...args) => {
+		args = args || noarr;
 		if (logArgs) {
 			logger(tag, ...args);
 		} else {

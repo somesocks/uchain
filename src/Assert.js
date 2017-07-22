@@ -1,5 +1,5 @@
 
-const { nop } = require('./_base');
+const { nop, noarr } = require('./_base');
 
 const Assert = (validator, msg) => {
 	validator = validator || nop;
@@ -7,6 +7,7 @@ const Assert = (validator, msg) => {
 
 	return (next, ...args) => {
 		next = next || nop;
+		args = args || noarr;
 		const err = validator(args) ? null : new Error(`${msg}\nargs: ${JSON.stringify(args)}`);
 		next(err, ...args);
 	};

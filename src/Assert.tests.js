@@ -3,7 +3,7 @@
 const { Assert, InSeries, InParallel, PassThrough, Logging, CatchError } = require('./');
 
 const Valid = require('simple-validator');
-const { isBoolean, isNumber } = Valid;
+const { optional, exists, isBoolean, isNumber } = Valid;
 const { matches } = Valid.Object;
 
 describe('Assert', () => {
@@ -19,5 +19,10 @@ describe('Assert', () => {
 			(next) => next(null, false),
 			Assert(matches([ isNumber ]))
 		)((err) => done(err != null ? null : err));
+	});
+
+	it('Assert 2', (done) => {
+		const chain = Assert(matches(optional(exists)));
+		chain(done);
 	});
 });

@@ -1,7 +1,9 @@
 
-const { defer, once, catchWrapper, nop } = require('./_base');
+const { defer, once, catchWrapper, nop, noarr } = require('./_base');
 
 const InSeries = (...handlers) => {
+	handlers = handlers || noarr;
+
 	if (handlers.length === 0) {
 		return (next) => (next || nop)();
 	} else {
@@ -9,9 +11,12 @@ const InSeries = (...handlers) => {
 
 		return (next, ...args) => {
 			next = once(next);
+			args = args || noarr;
 
 			let index = 0;
 			const worker = (err, ...res) => {
+				res = res || noarr;
+
 				if (err || index >= handlers.length) {
 					next(err, ...res);
 				} else {

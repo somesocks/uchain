@@ -1,5 +1,5 @@
 
-const { defer, once, catchWrapper, nop } = require('./_base');
+const { defer, once, catchWrapper, nop, noarr } = require('./_base');
 
 const InParallel = (...handlers) => {
 	if (handlers.length === 0) {
@@ -9,6 +9,7 @@ const InParallel = (...handlers) => {
 
 		return (next, ...args) => {
 			next = once(next);
+			args = args || noarr;
 
 			let done = 0;
 			const results = [];
@@ -17,6 +18,7 @@ const InParallel = (...handlers) => {
 				const h = handlers[i];
 
 				const onDone = (err, ...res) => {
+					res = res || noarr;
 					if (err) {
 						next(err);
 					} else {

@@ -1,5 +1,7 @@
 require('setimmediate');
 
+const noarr = [];
+
 const nop = (err) => {
 	if (err) {
 		console.warn('Warning: uchain ignored error\n', err);
@@ -25,6 +27,7 @@ const catchWrapper = (h) => (next, ...rest) => {
 
 module.exports = {
 	nop,
+	noarr,
 	once,
 	defer,
 	catchWrapper,
