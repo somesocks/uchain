@@ -1,9 +1,9 @@
 
-const { defer, once, catchWrapper } = require('./_base');
+const { defer, once, catchWrapper, nop } = require('./_base');
 
 const InSeries = (...handlers) => {
 	if (handlers.length === 0) {
-		return (next) => next();
+		return (next) => (next || nop)();
 	} else {
 		handlers = handlers.map(catchWrapper);
 

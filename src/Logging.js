@@ -1,4 +1,6 @@
 
+const { nop } = require('./_base');
+
 const isString = (val) => (typeof val === 'string') || (val instanceof String);
 
 const Logging = (options = '') => {
@@ -15,7 +17,7 @@ const Logging = (options = '') => {
 		} else {
 			logger(tag);
 		}
-		next(null, ...args);
+		(next || nop)(null, ...args);
 	};
 };
 
