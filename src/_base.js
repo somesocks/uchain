@@ -8,22 +8,34 @@ const nop = (err) => {
 	}
 };
 
-const once = (f) => (...args) => {
-	const temp = f || nop;
-	f = nop;
-	temp(...args);
+const once = function (func) {
+	return function () {
+		const args = arguments;
+		const temp = func || nop;
+		func = nop;
+		temp.apply(undefined, args);
+	};
 };
 
+// const defer = function () {
+// 	const args = arguments;
+// 	console.log('defer args', args, args.length);
+// 	setImmediate.apply(undefined, args);
+// };
+//
 const defer = setImmediate;
 
-const catchWrapper = (h) => (next, ...rest) => {
-	try {
-		h(next, ...rest);
-	} catch (err) {
-		next(err);
-	}
+const catchWrapper = function (func) {
+	return function () {
+		const args = arguments;
+		try {
+			func.apply(undefined, args);
+		} catch (err) {
+			const next = args[0] || nop;
+			next(err);
+		}
+	};
 };
-
 
 module.exports = {
 	nop,

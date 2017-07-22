@@ -1,33 +1,42 @@
 
-const { defer, once, catchWrapper, nop, noarr } = require('./_base');
+const { defer, once, catchWrapper, nop } = require('./_base');
 
-const InSeries = (...handlers) => {
-	handlers = handlers || noarr;
+const EMPTY = function (next) { return (next || nop)(); };
+
+const InSeries = function () {
+	const handlers = arguments;
 
 	if (handlers.length === 0) {
-		return (next) => (next || nop)();
-	} else {
-		handlers = handlers.map(catchWrapper);
-
-		return (next, ...args) => {
-			next = once(next);
-			args = args || noarr;
-
-			let index = 0;
-			const worker = (err, ...res) => {
-				res = res || noarr;
-
-				if (err || index >= handlers.length) {
-					next(err, ...res);
-				} else {
-					const handler = handlers[index++];
-					defer(handler, once(worker), ...res);
-				}
-			};
-
-			worker(null, ...args);
-		};
+		return EMPTY;
 	}
+
+	const series = function () {
+		const args = arguments;
+		const next = once(args[0]);
+
+		let index = 0;
+		const worker = function () {
+			const args = arguments;
+			const err = args[0];
+
+			if (err || index >= handlers.length) {
+				next.apply(undefined, args);
+			} else {
+				const handler = catchWrapper(handlers[index++])
+					.bind(undefined, once(worker));
+
+				args[0] = handler;
+				args.length = args.length > 1 ? args.length : 1;
+
+				defer.apply(undefined, args);
+			}
+		};
+
+		args[0] = undefined;
+		worker.apply(undefined, args);
+	};
+
+	return series;
 };
 
 module.exports = InSeries;

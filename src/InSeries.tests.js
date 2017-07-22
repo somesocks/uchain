@@ -2,7 +2,7 @@
 
 const { InSeries, InParallel, PassThrough, Logging } = require('./');
 
-describe('InSeries', () => {
+describe('InSeries tests', () => {
 	it('Long Chain Performance', (done) => {
 		const chain = InSeries(
 			...Array(100000).fill(PassThrough)

@@ -27,6 +27,8 @@ module.exports = {
 		'no-shadow': ['warn'],
 		'no-loop-func': ['warn'],
 		'no-prototype-builtins': ['warn'],
+		'prefer-rest-params': ['warn'],
+		'prefer-spread': ['warn'],
 		'prefer-const': ['warn'],
 		'prefer-template': ['warn'],
 		'object-shorthand': ['warn'],
