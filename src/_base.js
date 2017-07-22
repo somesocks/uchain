@@ -1,6 +1,11 @@
 require('setimmediate');
 
-const nop = () => {};
+const nop = (err) => {
+	if (err) {
+		console.warn('Warning: uchain ignored error\n', err);
+	}
+};
+
 const once = (f) => (...args) => {
 	const temp = f || nop;
 	f = nop;
