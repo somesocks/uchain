@@ -1,6 +1,11 @@
 
-const { nop, noarr } = require('./_base');
+const { nop } = require('./_base');
 
-const PassThrough = (next, ...args) => (next || nop)(null, ...(args || noarr));
+const PassThrough = function () {
+	const args = arguments;
+	const next = args[0] || nop;
+	args[0] = undefined;
+	next.apply(undefined, args);
+};
 
 module.exports = PassThrough;

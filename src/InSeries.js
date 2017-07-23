@@ -15,6 +15,7 @@ const InSeries = function () {
 		const next = once(args[0]);
 
 		let index = 0;
+
 		const worker = function () {
 			const args = arguments;
 			const err = args[0];
@@ -26,8 +27,7 @@ const InSeries = function () {
 					.bind(undefined, once(worker));
 
 				args[0] = handler;
-				args.length = args.length > 1 ? args.length : 1;
-
+				args.length = args.length || 1;
 				defer.apply(undefined, args);
 			}
 		};
