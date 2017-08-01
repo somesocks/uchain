@@ -11,6 +11,12 @@ describe('InParallel', () => {
 		chain(done);
 	});
 
+	it('Function.length should be at least 1', () => {
+		if (InParallel().length < 1) { throw new Error(); }
+		if (InParallel(() => {}).length < 1) { throw new Error(); }
+		if (InParallel(() => {}, () => {}).length < 1) { throw new Error(); }
+	});
+
 	it('test with 0 handlers', (done) => {
 		InParallel()(done);
 	});
@@ -40,6 +46,7 @@ describe('InParallel', () => {
 	it('doesnt return on no callback', (done) => {
 		InSeries(
 			InParallel(
+				PassThrough,
 				(next) => null
 			),
 			() => { throw new Error('shouldnt get here'); }

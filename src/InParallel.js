@@ -10,9 +10,9 @@ const InParallel = function () {
 		return EMPTY;
 	}
 
-	const parallel = function () {
+	const parallel = function (next) {
 		const args = arguments;
-		const next = once(args[0]);
+		next = once(next);
 
 		const results = Array(handlers.length + 1);
 		let done = 0;

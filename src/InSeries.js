@@ -10,9 +10,9 @@ const InSeries = function () {
 		return EMPTY;
 	}
 
-	const series = function () {
+	const series = function (next) {
 		const args = arguments;
-		const next = once(args[0]);
+		next = once(next);
 
 		let index = 0;
 

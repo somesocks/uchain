@@ -12,6 +12,10 @@ describe('ParallelFilter', () => {
 		task(done, ...Array(1000).fill(1));
 	});
 
+	it('Function.length should be at least 1', () => {
+		if (ParallelFilter((next) => true).length < 1) { throw new Error(); }
+	});
+
 	it('test with 0 args', (done) => {
 		const task = ParallelFilter((next, item) => next(null, true));
 		task(done);

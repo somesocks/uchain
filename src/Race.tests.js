@@ -14,6 +14,11 @@ describe('Race', () => {
 		)(done);
 	});
 
+	it('Function.length should be at least 1', () => {
+		if (Race().length < 1) { throw new Error(); }
+		if (Race((next) => true).length < 1) { throw new Error(); }
+	});
+
 	it('test with null callback', (done) => {
 		Race(
 			(next) => next(),

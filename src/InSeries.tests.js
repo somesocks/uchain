@@ -11,6 +11,12 @@ describe('InSeries tests', () => {
 		chain(done, 1, 2, 3);
 	});
 
+	it('Function.length should be at least 1', () => {
+		if (InSeries().length < 1) { throw new Error(); }
+		if (InSeries(() => {}).length < 1) { throw new Error(); }
+		if (InSeries(() => {}, () => {}).length < 1) { throw new Error(); }
+	});
+
 	it('test with 0 handlers', (done) => {
 		InSeries()(done);
 	});
@@ -35,6 +41,13 @@ describe('InSeries tests', () => {
 			(next) => next(),
 			(next) => { throw new Error('error'); }
 		)((err, res) => done(err != null ? null : err));
+	});
+
+	it('callback shouldnt get called', (done) => {
+		InSeries(
+			(next) => {}
+		)(() => done(new Error('called')));
+		setTimeout(done, 500);
 	});
 
 	it(

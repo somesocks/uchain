@@ -41,9 +41,7 @@ const Throttle = (task = PassThrough, limit = 1) => {
 	const queue = new Queue();
 	let running = 0;
 
-	const throttle = (...args) => {
-		const [ next, ...rest ] = args;
-
+	const throttle = (next, ...rest) => {
 		const after = (...results) => {
 			running--;
 			if (running < limit && queue.length() > 0) {
@@ -58,7 +56,7 @@ const Throttle = (task = PassThrough, limit = 1) => {
 			running++;
 			task(after, ...rest);
 		} else {
-			queue.push(args);
+			queue.push([ next, ...rest ]);
 		}
 	};
 

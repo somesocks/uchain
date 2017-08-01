@@ -16,6 +16,10 @@ describe('ParallelObjectMap', () => {
 		task(done, { a: 1, b: 2, c: 3 });
 	});
 
+	it('Function.length should be at least 1', () => {
+		if (ParallelObjectMap((next) => true).length < 1) { throw new Error(); }
+	});
+
 	it('test with 0 args', (done) => {
 		const double = (next, key, val) => next(null, val * 2);
 

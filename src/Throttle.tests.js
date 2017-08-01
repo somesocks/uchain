@@ -9,6 +9,11 @@ describe('Throttle', () => {
 		Throttle()(done);
 	});
 
+	it('Function.length should be at least 1', () => {
+		if (Throttle().length < 1) { throw new Error(); }
+		if (Throttle((next) => true).length < 1) { throw new Error(); }
+	});
+
 	it('test with null callback', (done) => {
 		Throttle(
 			(next) => next(),
