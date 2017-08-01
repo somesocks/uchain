@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 
-const { InSeries, InParallel, PassThrough, Logging } = require('./');
+const { InSeries, InParallel, PassThrough, Logging } = require('../dist');
 
 describe('Logging', () => {
 	it('Logging with string', (done) => {

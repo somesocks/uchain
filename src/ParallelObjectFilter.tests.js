@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 
-const { InSeries, InParallel, PassThrough, Logging, ParallelObjectFilter } = require('./');
+const { InSeries, InParallel, PassThrough, Logging, ParallelObjectFilter } = require('../dist');
 
 describe('ParallelObjectFilter', () => {
 	it('ParallelObjectFilter works', (done) => {

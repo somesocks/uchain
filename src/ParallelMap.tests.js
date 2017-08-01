@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 
-const { InSeries, InParallel, PassThrough, Logging, ParallelMap } = require('./');
+const { InSeries, InParallel, PassThrough, Logging, ParallelMap } = require('../dist');
 
 describe('ParallelMap', () => {
 	it('ParallelMap works', (done) => {

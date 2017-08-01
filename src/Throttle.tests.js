@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 
-const { InSeries, InParallel, Race, PassThrough, Logging, Throttle } = require('./');
+const { InSeries, InParallel, Race, PassThrough, Logging, Throttle } = require('../dist');
 
 const { assert } = require('chai');
 

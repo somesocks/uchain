@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 
-const { InSeries, InParallel, PassThrough, Logging, CatchError } = require('./');
+const { InSeries, InParallel, PassThrough, Logging, CatchError } = require('../dist');
 
 describe('CatchError', () => {
 	it('CatchError 1', (done) => {

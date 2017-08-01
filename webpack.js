@@ -11,11 +11,12 @@ const plugins = [
 
 const CONFIG = {
 	entry: {
-		'uchain.js': [ './src/index.js' ],
+		'uchain': [ './src/index.js' ],
 	},
 	output: {
 		path: DIST_DIR,
-		filename: '[name]',
+		filename: '[name].js',
+		library: '[name]',
 		libraryTarget: 'umd',
 	},
 	module: {

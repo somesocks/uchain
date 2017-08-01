@@ -1,5 +1,5 @@
 
-const { defer, once, catchWrapper, nop } = require('./_base');
+const { defer, once, catchWrapper, nop, StackError } = require('./_base');
 
 const EMPTY = function (next) { return (next || nop)(); };
 
@@ -18,9 +18,10 @@ const InSeries = function () {
 
 		const worker = function () {
 			const args = arguments;
-			const err = args[0];
 
-			if (err || index >= handlers.length) {
+			if (args[0] != null) {
+				next.apply(undefined, args);
+			} else if (index >= handlers.length) {
 				next.apply(undefined, args);
 			} else {
 				const handler = catchWrapper(handlers[index++])

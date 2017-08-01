@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 
-const { InSeries, InParallel, PassThrough, Logging } = require('./');
+const { InSeries, InParallel, CatchError, PassThrough, Logging } = require('../dist');
 
 describe('InSeries tests', () => {
 	it('Long Chain Performance', (done) => {
@@ -36,4 +36,20 @@ describe('InSeries tests', () => {
 			(next) => { throw new Error('error'); }
 		)((err, res) => done(err != null ? null : err));
 	});
+
+	it(
+		'deep error stack works',
+		InSeries(
+			CatchError(
+				InSeries(
+					InSeries(
+						(next) => next(),
+						(next) => { throw new Error('error'); }
+					)
+				)
+			),
+			Logging('Error Stack')
+		)
+	);
+
 });
