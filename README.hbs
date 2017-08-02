@@ -1,0 +1,31 @@
+# uchain
+
+A tiny library for chaining functions asynchronously.
+
+```javascript
+  let chain = InSeries(
+    InParallel(
+      (next, a, b) => next(null, a + b),
+      (next, a, b) => next(null, a - b),
+    ),
+    (next, [ sum ], [ difference ]) => next(null, sum * difference),
+    (next, result) => console.log('asynchronous math', result)
+  );
+
+  chain(null, 1, 2); // prints out -3, eventually
+```
+
+### Links in the chain
+There are two function signatures expected by uchain.  Every 'task' in the chain takes in a next function, and then any number of arguments.
+
+    function (next, ...args) {...}
+
+Every 'next' function is a callback, that takes in an error parameter, and then any number of results;  These results are passed to the next link in the chain.
+
+    function (err, ...results) {...}
+
+The utilities provided in the library generate next functions to bind your tasks together asynchronously.
+
+## API
+
+{{>main}}

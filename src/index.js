@@ -1,3 +1,21 @@
+/** @namespace uchain */
+
+/**
+* An async callback function.
+*
+* @callback nextFunction
+* @param {error} err
+* @param {...*} results
+*/
+
+
+/**
+* An async task function.
+*
+* @callback taskFunction
+* @param {nextFunction} next
+* @param {...*} args
+*/
 
 module.exports = {
 	Assert: require('./Assert'),
@@ -13,4 +31,5 @@ module.exports = {
 	PassThrough: require('./PassThrough'),
 	Race: require('./Race'),
 	Throttle: require('./Throttle'),
+	Timer: require('./Timer'),
 };

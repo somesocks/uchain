@@ -5,6 +5,12 @@ const isString = (val) => (typeof val === 'string') || (val instanceof String);
 
 const LOGGER = (...args) => console.log(...args);
 
+/**
+* Logs the arguments passed into the task, and then passes them along.
+* @param {string} label - an optional tag for the label.
+* @returns {taskFunction} a logging task
+* @memberof uchain
+*/
 const Logging = (options = '') => {
 	options = isString(options) ? { tag: options } : options;
 	options.tag = options.tag != null ? options.tag : '';

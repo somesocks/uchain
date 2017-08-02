@@ -1,6 +1,12 @@
 
 const { defer, once, catchWrapper } = require('./_base');
 
+/**
+* Similar to ParallelFilter, but instead of running on an array of arguments, it runs a filter on every key-value pair in an object.
+* @param {taskFunction} task - an asynchronous filter function.
+* @returns {taskFunction} a parallel filter task
+* @memberof uchain
+*/
 const ParallelObjectFilter = (mapping) => {
 	mapping = catchWrapper(mapping);
 

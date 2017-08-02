@@ -3,6 +3,35 @@ const { defer, once, catchWrapper, nop, StackError } = require('./_base');
 
 const EMPTY = function (next) { return (next || nop)(); };
 
+/**
+* ```javascript
+*   let chain = InSeries(
+*     function(next, ...args) {},
+*     function(next, ...args) {},
+*     ...
+*   );
+*
+*   chain(next, ...args);
+* ```
+* Runs several tasks in series, and passes the results from one down to the next.
+* This works similarly to the 'waterfall' method in caolan's async.
+* ```javascript
+*   let chain = InSeries(
+*     (next) => { console.log(1); next();}
+*     InSeries(
+*       (next) => { console.log(2); next();}
+*       (next) => { console.log(3); next();}
+*     ),
+*     InSeries(
+*       (next) => { console.log(4); next();}
+*       (next) => { console.log(5); next();}
+*     )
+*   )(); // prints out 1 2 3 4 5, eventually
+```
+* @param {...taskFunction} tasks - any number of tasks to run in series.
+* @returns {taskFunction} a wrapper function that runs the tasks in parallel
+* @memberof uchain
+*/
 const InSeries = function () {
 	const handlers = arguments;
 
