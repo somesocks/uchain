@@ -54,6 +54,7 @@ The utilities provided in the library generate next functions to bind your tasks
 * [uchain](#uchain) : <code>object</code>
     * [.Assert(validator, message)](#uchain.Assert) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.CatchError(task)](#uchain.CatchError) ⇒ <code>[taskFunction](#taskFunction)</code>
+    * [.If(conditionTask, thenTask, elseTask)](#uchain.If) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.InParallel(...tasks)](#uchain.InParallel) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.InSeries(...tasks)](#uchain.InSeries) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.Logging(label)](#uchain.Logging) ⇒ <code>[taskFunction](#taskFunction)</code>
@@ -125,6 +126,43 @@ If you need to catch an error explicitly at some point, wrap a chain in CatchErr
 | Param | Type | Description |
 | --- | --- | --- |
 | task | <code>[taskFunction](#taskFunction)</code> | a function that checks the arguments. |
+
+<a name="uchain.If"></a>
+
+### uchain.If(conditionTask, thenTask, elseTask) ⇒ <code>[taskFunction](#taskFunction)</code>
+```javascript
+  let task = If(
+    function(next, ...args) {},
+    function(next, ...args) {},
+    function(next, ...args) {}
+  );
+
+  chain(next, ...args);
+```
+If accepts up to three tasks and returns a task that conditionally executes some.
+
+```javascript
+  let logIfEven = If(
+			(next, num) => next(null, num % 2 === 0)
+			(next, num) => { console.log('is even!'); next(null, num); },
+			(next, num) => { console.log('is not even!'); next(null, num); },
+  );
+
+  let onDone = (err, ...results) => console.log(results);
+
+  logIfEven(null, 1); // prints out 'is not even!' eventually
+  logIfEven(null, 2); // prints out 'is even!' eventually
+```
+note: by default, the conditionTask, thenTask, and elseTask are all set to PassThrough
+note: the conditionTask can return multiple results, but only the first is checked for truthiness
+
+**Kind**: static method of <code>[uchain](#uchain)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| conditionTask | <code>[taskFunction](#taskFunction)</code> | a condition task. |
+| thenTask | <code>[taskFunction](#taskFunction)</code> | a task to run if the condition returns a truthy value. |
+| elseTask | <code>[taskFunction](#taskFunction)</code> | a task to run if the condition returns a falsy value. |
 
 <a name="uchain.InParallel"></a>
 
