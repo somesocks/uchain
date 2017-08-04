@@ -143,9 +143,9 @@ If accepts up to three tasks and returns a task that conditionally executes some
 
 ```javascript
   let logIfEven = If(
-			(next, num) => next(null, num % 2 === 0)
-			(next, num) => { console.log('is even!'); next(null, num); },
-			(next, num) => { console.log('is not even!'); next(null, num); },
+    (next, num) => next(null, num % 2 === 0)
+    (next, num) => { console.log('is even!'); next(null, num); },
+    (next, num) => { console.log('is not even!'); next(null, num); },
   );
 
   let onDone = (err, ...results) => console.log(results);
