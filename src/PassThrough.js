@@ -9,9 +9,9 @@ const { nop } = require('./_base');
 * ```
 * @memberof uchain
 */
-const PassThrough = function () {
+const PassThrough = function (next) {
 	const args = arguments;
-	const next = args[0] || nop;
+	next = next || nop;
 	args[0] = undefined;
 	next.apply(undefined, args);
 };

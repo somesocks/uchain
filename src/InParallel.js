@@ -1,5 +1,5 @@
 
-const { defer, once, catchWrapper, nop, noarr } = require('./_base');
+const { defer, once, catchWrapper, nop } = require('./_base');
 
 const EMPTY = function (next) { return (next || nop)(); };
 

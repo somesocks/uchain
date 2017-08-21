@@ -1,5 +1,5 @@
 
-const { nop, once, catchWrapper } = require('./_base');
+const { once, catchWrapper } = require('./_base');
 
 const EMPTY_TASK = (next) => next();
 

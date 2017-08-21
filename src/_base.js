@@ -26,12 +26,12 @@ const once = function (func) {
 const defer = setImmediate;
 
 const catchWrapper = function (func) {
-	return function () {
+	return function (next) {
 		const args = arguments;
 		try {
 			func.apply(undefined, args);
 		} catch (err) {
-			const next = args[0] || nop;
+			next = next || nop;
 			next(err);
 		}
 	};

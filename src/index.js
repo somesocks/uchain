@@ -30,6 +30,7 @@ module.exports = {
 	ParallelObjectFilter: require('./ParallelObjectFilter'),
 	ParallelObjectMap: require('./ParallelObjectMap'),
 	PassThrough: require('./PassThrough'),
+	PromiseWrapper: require('./PromiseWrapper'),
 	Race: require('./Race'),
 	Throttle: require('./Throttle'),
 	Timer: require('./Timer'),

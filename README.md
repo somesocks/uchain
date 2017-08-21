@@ -64,6 +64,7 @@ The utilities provided in the library generate next functions to bind your tasks
     * [.ParallelObjectFilter(task)](#uchain.ParallelObjectFilter) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.ParallelObjectMap(task)](#uchain.ParallelObjectMap) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.PassThrough()](#uchain.PassThrough)
+    * [.PromiseWrapper(generator)](#uchain.PromiseWrapper) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.Race(...tasks)](#uchain.Race) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.Throttle(task, limit)](#uchain.Throttle) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.Timer(task, label)](#uchain.Timer) ⇒ <code>[taskFunction](#taskFunction)</code>
@@ -317,6 +318,18 @@ Sometimes, you need to pass previous arguments along with a new result.  The eas
 ```
 
 **Kind**: static method of <code>[uchain](#uchain)</code>  
+<a name="uchain.PromiseWrapper"></a>
+
+### uchain.PromiseWrapper(generator) ⇒ <code>[taskFunction](#taskFunction)</code>
+Wraps around a promise generator function, to make it easier t.
+
+**Kind**: static method of <code>[uchain](#uchain)</code>  
+**Returns**: <code>[taskFunction](#taskFunction)</code> - a task that wraps around the promise  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| generator | <code>function</code> | a function that generates a promise from the args. |
+
 <a name="uchain.Race"></a>
 
 ### uchain.Race(...tasks) ⇒ <code>[taskFunction](#taskFunction)</code>
