@@ -6,7 +6,7 @@ const PassThrough = require('./PassThrough');
 * ```javascript
 *   let chain = InSeries(
 *     function(next, ...args) {...},
-*			PromiseWrapper(
+*     PromiseWrapper(
 *       (...args) => new Promise((resolve, reject) => resolve(...args))
 *     ),
 *     function(next, ...args) {},
