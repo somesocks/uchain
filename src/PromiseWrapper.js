@@ -3,6 +3,18 @@ const { catchWrapper } = require('./_base');
 const PassThrough = require('./PassThrough');
 
 /**
+* ```javascript
+*   let chain = InSeries(
+*     function(next, ...args) {...},
+*			PromiseWrapper(
+*       (...args) => new Promise((resolve, reject) => resolve(...args))
+*     ),
+*     function(next, ...args) {},
+*     ...
+*   );
+*
+*   chain(next, ...args);
+* ```
 * Wraps around a promise generator function, to make it easier t.
 * @param {function} generator - a function that generates a promise from the args.
 * @returns {taskFunction} a task that wraps around the promise

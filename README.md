@@ -321,6 +321,18 @@ Sometimes, you need to pass previous arguments along with a new result.  The eas
 <a name="uchain.PromiseWrapper"></a>
 
 ### uchain.PromiseWrapper(generator) ⇒ <code>[taskFunction](#taskFunction)</code>
+```javascript
+  let chain = InSeries(
+    function(next, ...args) {...},
+			PromiseWrapper(
+      (...args) => new Promise((resolve, reject) => resolve(...args))
+    ),
+    function(next, ...args) {},
+    ...
+  );
+
+  chain(next, ...args);
+```
 Wraps around a promise generator function, to make it easier t.
 
 **Kind**: static method of <code>[uchain](#uchain)</code>  
