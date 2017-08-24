@@ -34,4 +34,5 @@ module.exports = {
 	Race: require('./Race'),
 	Throttle: require('./Throttle'),
 	Timer: require('./Timer'),
+	While: require('./While'),
 };

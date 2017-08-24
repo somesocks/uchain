@@ -68,6 +68,7 @@ The utilities provided in the library generate next functions to bind your tasks
     * [.Race(...tasks)](#uchain.Race) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.Throttle(task, limit)](#uchain.Throttle) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.Timer(task, label)](#uchain.Timer) ⇒ <code>[taskFunction](#taskFunction)</code>
+    * [.While(conditionTask, loopTask)](#uchain.While) ⇒ <code>[taskFunction](#taskFunction)</code>
 
 <a name="uchain.Assert"></a>
 
@@ -402,6 +403,39 @@ Wraps a task and logs how long it takes to finish, or fail.
 | --- | --- | --- |
 | task | <code>[taskFunction](#taskFunction)</code> | the task to wrap. |
 | label | <code>string</code> | an optional label to log. |
+
+<a name="uchain.While"></a>
+
+### uchain.While(conditionTask, loopTask) ⇒ <code>[taskFunction](#taskFunction)</code>
+```javascript
+  let task = While(
+    function(next, ...args) {},
+    function(next, ...args) {},
+  );
+
+  chain(next, ...args);
+```
+While accepts two tasks and returns a task that conditionally executes some.
+
+```javascript
+  let incUntil10 = While(
+    (next, num) => next(null, num < 10),
+    (next, num) => { console.log('num', nul); next(null, num++); },
+  );
+
+  let onDone = (err, ...results) => console.log(results);
+
+  incUntil10(null, 1); // prints 1, 2, ... 9
+```
+note: the results of the loop task are saved to pass into the conditionTask, and the loopTask
+note: when the condition task returns false, those results are passed down the chain
+
+**Kind**: static method of <code>[uchain](#uchain)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| conditionTask | <code>[taskFunction](#taskFunction)</code> | a condition task. |
+| loopTask | <code>[taskFunction](#taskFunction)</code> | a task to run if the condition returns a truthy value. |
 
 <a name="nextFunction"></a>
 
