@@ -420,7 +420,7 @@ While accepts two tasks and returns a task that conditionally executes some.
 ```javascript
   let incUntil10 = While(
     (next, num) => next(null, num < 10),
-    (next, num) => { console.log('num', nul); next(null, num++); },
+    (next, num) => { console.log('num', nul); next(null, num + 1); },
   );
 
   let onDone = (err, ...results) => console.log(results);
