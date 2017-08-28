@@ -73,6 +73,9 @@ The utilities provided in the library generate next functions to bind your tasks
     * [.Timer(task, label)](#uchain.Timer) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.While(conditionTask, loopTask)](#uchain.While) ⇒ <code>[taskFunction](#taskFunction)</code>
 
+
+* * *
+
 <a name="uchain.FromPromise"></a>
 
 ### uchain.FromPromise ⇒ <code>[taskFunction](#taskFunction)</code>
@@ -98,6 +101,9 @@ to make it easier to integrate with task functions.
 | Param | Type | Description |
 | --- | --- | --- |
 | generator | <code>function</code> | a function that generates a promise from the args. |
+
+
+* * *
 
 <a name="uchain.ToPromise"></a>
 
@@ -131,6 +137,9 @@ ToPromise always resolves to an array of the results returned.
 | --- | --- | --- |
 | task | <code>function</code> | a function that generates a promise from the args. |
 
+
+* * *
+
 <a name="uchain.Assert"></a>
 
 ### uchain.Assert(validator, message) ⇒ <code>[taskFunction](#taskFunction)</code>
@@ -144,6 +153,9 @@ Assert passes an error to its callback.
 | --- | --- | --- |
 | validator | <code>function</code> | a function that checks the arguments. |
 | message | <code>string</code> | an optional error message to throw if the assertion fails. |
+
+
+* * *
 
 <a name="uchain.CatchError"></a>
 
@@ -190,6 +202,9 @@ If you need to catch an error explicitly at some point, wrap a chain in CatchErr
 | --- | --- | --- |
 | task | <code>[taskFunction](#taskFunction)</code> | a function that checks the arguments. |
 
+
+* * *
+
 <a name="uchain.If"></a>
 
 ### uchain.If(conditionTask, thenTask, elseTask) ⇒ <code>[taskFunction](#taskFunction)</code>
@@ -227,6 +242,9 @@ note: the conditionTask can return multiple results, but only the first is check
 | thenTask | <code>[taskFunction](#taskFunction)</code> | a task to run if the condition returns a truthy value. |
 | elseTask | <code>[taskFunction](#taskFunction)</code> | a task to run if the condition returns a falsy value. |
 
+
+* * *
+
 <a name="uchain.InParallel"></a>
 
 ### uchain.InParallel(...tasks) ⇒ <code>[taskFunction](#taskFunction)</code>
@@ -263,6 +281,9 @@ This includes an empty array for tasks that don't return results.
 | --- | --- | --- |
 | ...tasks | <code>[taskFunction](#taskFunction)</code> | any number of tasks to run in parallel. |
 
+
+* * *
+
 <a name="uchain.InSeries"></a>
 
 ### uchain.InSeries(...tasks) ⇒ <code>[taskFunction](#taskFunction)</code>
@@ -298,6 +319,9 @@ This works similarly to the 'waterfall' method in caolan's async.
 | --- | --- | --- |
 | ...tasks | <code>[taskFunction](#taskFunction)</code> | any number of tasks to run in series. |
 
+
+* * *
+
 <a name="uchain.Logging"></a>
 
 ### uchain.Logging(label) ⇒ <code>[taskFunction](#taskFunction)</code>
@@ -309,6 +333,9 @@ Logs the arguments passed into the task, and then passes them along.
 | Param | Type | Description |
 | --- | --- | --- |
 | label | <code>string</code> | an optional tag for the label. |
+
+
+* * *
 
 <a name="uchain.ParallelFilter"></a>
 
@@ -322,6 +349,9 @@ Builds a task that filters all of its arguments in parallel, and returns the res
 | --- | --- | --- |
 | filter | <code>[taskFunction](#taskFunction)</code> | an asynchronous filter function that returns true or false through its callback. |
 
+
+* * *
+
 <a name="uchain.ParallelForEach"></a>
 
 ### uchain.ParallelForEach(task) ⇒ <code>[taskFunction](#taskFunction)</code>
@@ -333,6 +363,9 @@ Builds a task wrapper that calls a task once on each of its arguments in paralle
 | Param | Type | Description |
 | --- | --- | --- |
 | task | <code>[taskFunction](#taskFunction)</code> | an asynchronous function that gets called once on each argument. |
+
+
+* * *
 
 <a name="uchain.ParallelMap"></a>
 
@@ -347,6 +380,9 @@ Note: even though the mapping function can return any number of results, Paralle
 | --- | --- | --- |
 | task | <code>[taskFunction](#taskFunction)</code> | an asynchronous mapping function. |
 
+
+* * *
+
 <a name="uchain.ParallelObjectFilter"></a>
 
 ### uchain.ParallelObjectFilter(task) ⇒ <code>[taskFunction](#taskFunction)</code>
@@ -358,6 +394,9 @@ Similar to ParallelFilter, but instead of running on an array of arguments, it r
 | Param | Type | Description |
 | --- | --- | --- |
 | task | <code>[taskFunction](#taskFunction)</code> | an asynchronous filter function. |
+
+
+* * *
 
 <a name="uchain.ParallelObjectMap"></a>
 
@@ -371,6 +410,9 @@ Similar to ParallelMap, but instead of running on an array of arguments, it runs
 | --- | --- | --- |
 | task | <code>[taskFunction](#taskFunction)</code> | an asynchronous map function. |
 
+
+* * *
+
 <a name="uchain.PassThrough"></a>
 
 ### uchain.PassThrough()
@@ -380,6 +422,9 @@ Sometimes, you need to pass previous arguments along with a new result.  The eas
 ```
 
 **Kind**: static method of <code>[uchain](#uchain)</code>  
+
+* * *
+
 <a name="uchain.PromiseWrapper"></a>
 
 ### uchain.PromiseWrapper(generator) ⇒ <code>[taskFunction](#taskFunction)</code>
@@ -404,6 +449,9 @@ to make it easier to integrate with task functions.
 | Param | Type | Description |
 | --- | --- | --- |
 | generator | <code>function</code> | a function that generates a promise from the args. |
+
+
+* * *
 
 <a name="uchain.Promisify"></a>
 
@@ -435,6 +483,9 @@ Promisify always resolves to an array of the results returned.
 | Param | Type | Description |
 | --- | --- | --- |
 | task | <code>function</code> | a function that generates a promise from the args. |
+
+
+* * *
 
 <a name="uchain.Race"></a>
 
@@ -470,6 +521,9 @@ Race accepts a number of functions, and returns a task function that executes al
 | --- | --- | --- |
 | ...tasks | <code>[taskFunction](#taskFunction)</code> | any number of tasks to run in parallel. |
 
+
+* * *
+
 <a name="uchain.Throttle"></a>
 
 ### uchain.Throttle(task, limit) ⇒ <code>[taskFunction](#taskFunction)</code>
@@ -484,6 +538,9 @@ Requests are queued up in an unbounded FIFO queue until they can be run.
 | task | <code>[taskFunction](#taskFunction)</code> | the task to throttle |
 | limit | <code>number</code> | the number of instances that can run in parallel. default 1. |
 
+
+* * *
+
 <a name="uchain.Timer"></a>
 
 ### uchain.Timer(task, label) ⇒ <code>[taskFunction](#taskFunction)</code>
@@ -496,6 +553,9 @@ Wraps a task and logs how long it takes to finish, or fail.
 | --- | --- | --- |
 | task | <code>[taskFunction](#taskFunction)</code> | the task to wrap. |
 | label | <code>string</code> | an optional label to log. |
+
+
+* * *
 
 <a name="uchain.While"></a>
 
@@ -530,6 +590,9 @@ note: when the condition task returns false, those results are passed down the c
 | conditionTask | <code>[taskFunction](#taskFunction)</code> | a condition task. |
 | loopTask | <code>[taskFunction](#taskFunction)</code> | a task to run if the condition returns a truthy value. |
 
+
+* * *
+
 <a name="nextFunction"></a>
 
 ## nextFunction : <code>function</code>
@@ -542,6 +605,9 @@ An async callback function.
 | err | <code>error</code> | 
 | ...results | <code>\*</code> | 
 
+
+* * *
+
 <a name="taskFunction"></a>
 
 ## taskFunction : <code>function</code>
@@ -553,4 +619,7 @@ An async task function.
 | --- | --- |
 | next | <code>[nextFunction](#nextFunction)</code> | 
 | ...args | <code>\*</code> | 
+
+
+* * *
 
