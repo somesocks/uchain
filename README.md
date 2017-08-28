@@ -67,7 +67,7 @@ The utilities provided in the library generate next functions to bind your tasks
     * [.ParallelObjectMap(task)](#uchain.ParallelObjectMap) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.PassThrough()](#uchain.PassThrough)
     * [.PromiseWrapper(generator)](#uchain.PromiseWrapper) ⇒ <code>[taskFunction](#taskFunction)</code>
-    * [.PromiseWrapper(task)](#uchain.PromiseWrapper) ⇒ <code>function</code>
+    * [.Promisify(task)](#uchain.Promisify) ⇒ <code>function</code>
     * [.Race(...tasks)](#uchain.Race) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.Throttle(task, limit)](#uchain.Throttle) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.Timer(task, label)](#uchain.Timer) ⇒ <code>[taskFunction](#taskFunction)</code>
@@ -405,9 +405,9 @@ to make it easier to integrate with task functions.
 | --- | --- | --- |
 | generator | <code>function</code> | a function that generates a promise from the args. |
 
-<a name="uchain.PromiseWrapper"></a>
+<a name="uchain.Promisify"></a>
 
-### uchain.PromiseWrapper(task) ⇒ <code>function</code>
+### uchain.Promisify(task) ⇒ <code>function</code>
 ```javascript
 
   let chain = InSeries(

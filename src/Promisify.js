@@ -27,7 +27,7 @@ const PassThrough = require('./PassThrough');
 * @returns {function} a function that generates a Promise when called
 * @memberof uchain
 */
-const PromiseWrapper = (task) => {
+const Promisify = (task) => {
 	if (task == null) {
 		return PassThrough;
 	} else {
@@ -53,4 +53,4 @@ const PromiseWrapper = (task) => {
 	return taskWrapper;
 };
 
-module.exports = PromiseWrapper;
+module.exports = Promisify;
