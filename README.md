@@ -52,6 +52,8 @@ The utilities provided in the library generate next functions to bind your tasks
 **Kind**: global namespace  
 
 * [uchain](#uchain) : <code>object</code>
+    * [.FromPromise](#uchain.FromPromise) ⇒ <code>[taskFunction](#taskFunction)</code>
+    * [.ToPromise](#uchain.ToPromise) ⇒ <code>function</code>
     * [.Assert(validator, message)](#uchain.Assert) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.CatchError(task)](#uchain.CatchError) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.If(conditionTask, thenTask, elseTask)](#uchain.If) ⇒ <code>[taskFunction](#taskFunction)</code>
@@ -65,10 +67,69 @@ The utilities provided in the library generate next functions to bind your tasks
     * [.ParallelObjectMap(task)](#uchain.ParallelObjectMap) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.PassThrough()](#uchain.PassThrough)
     * [.PromiseWrapper(generator)](#uchain.PromiseWrapper) ⇒ <code>[taskFunction](#taskFunction)</code>
+    * [.PromiseWrapper(task)](#uchain.PromiseWrapper) ⇒ <code>function</code>
     * [.Race(...tasks)](#uchain.Race) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.Throttle(task, limit)](#uchain.Throttle) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.Timer(task, label)](#uchain.Timer) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.While(conditionTask, loopTask)](#uchain.While) ⇒ <code>[taskFunction](#taskFunction)</code>
+
+<a name="uchain.FromPromise"></a>
+
+### uchain.FromPromise ⇒ <code>[taskFunction](#taskFunction)</code>
+```javascript
+  let chain = InSeries(
+    function(next, ...args) {...},
+    FromPromise(
+      (...args) => new Promise((resolve, reject) => resolve(...args))
+    ),
+    function(next, ...args) {},
+    ...
+  );
+
+  chain(next, ...args);
+```
+Alias for PromiseWrapper
+Wraps around a promise generator function,
+to make it easier to integrate with task functions.
+
+**Kind**: static constant of <code>[uchain](#uchain)</code>  
+**Returns**: <code>[taskFunction](#taskFunction)</code> - a task that wraps around the promise  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| generator | <code>function</code> | a function that generates a promise from the args. |
+
+<a name="uchain.ToPromise"></a>
+
+### uchain.ToPromise ⇒ <code>function</code>
+```javascript
+
+  let chain = InSeries(
+    function(next, ...args) {...},
+    function(next, ...args) {...},
+    ...
+  );
+
+ new Promise()
+   .then(
+     ToPromise(chain)
+   );
+
+```
+Alias for Promisify
+Wraps around a task function and greates a promise generator,
+to make it easier to integrate task functions and promises.
+NOTE: uchain does not come bundled with a promise library,
+it expects Promise to already exists in the global namespace.
+NOTE: because uchain can 'return' multiple values through the next callback,
+ToPromise always resolves to an array of the results returned.
+
+**Kind**: static constant of <code>[uchain](#uchain)</code>  
+**Returns**: <code>function</code> - a function that generates a Promise when called  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| task | <code>function</code> | a function that generates a promise from the args. |
 
 <a name="uchain.Assert"></a>
 
@@ -334,7 +395,8 @@ Sometimes, you need to pass previous arguments along with a new result.  The eas
 
   chain(next, ...args);
 ```
-Wraps around a promise generator function, to make it easier t.
+Wraps around a promise generator function,
+to make it easier to integrate with task functions.
 
 **Kind**: static method of <code>[uchain](#uchain)</code>  
 **Returns**: <code>[taskFunction](#taskFunction)</code> - a task that wraps around the promise  
@@ -342,6 +404,37 @@ Wraps around a promise generator function, to make it easier t.
 | Param | Type | Description |
 | --- | --- | --- |
 | generator | <code>function</code> | a function that generates a promise from the args. |
+
+<a name="uchain.PromiseWrapper"></a>
+
+### uchain.PromiseWrapper(task) ⇒ <code>function</code>
+```javascript
+
+  let chain = InSeries(
+    function(next, ...args) {...},
+    function(next, ...args) {...},
+    ...
+  );
+
+ new Promise()
+   .then(
+     Promisify(chain)
+   );
+
+```
+Wraps around a task function and greates a promise generator,
+to make it easier to integrate task functions and promises.
+NOTE: uchain does not come bundled with a promise library,
+it expects Promise to already exists in the global namespace.
+NOTE: because uchain can 'return' multiple values through the next callback,
+Promisify always resolves to an array of the results returned.
+
+**Kind**: static method of <code>[uchain](#uchain)</code>  
+**Returns**: <code>function</code> - a function that generates a Promise when called  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| task | <code>function</code> | a function that generates a promise from the args. |
 
 <a name="uchain.Race"></a>
 

@@ -20,6 +20,7 @@
 module.exports = {
 	Assert: require('./Assert'),
 	CatchError: require('./CatchError'),
+	FromPromise: require('./FromPromise'),
 	If: require('./If'),
 	InParallel: require('./InParallel'),
 	InSeries: require('./InSeries'),
@@ -31,8 +32,10 @@ module.exports = {
 	ParallelObjectMap: require('./ParallelObjectMap'),
 	PassThrough: require('./PassThrough'),
 	PromiseWrapper: require('./PromiseWrapper'),
+	Promisify: require('./Promisify'),
 	Race: require('./Race'),
 	Throttle: require('./Throttle'),
 	Timer: require('./Timer'),
+	ToPromise: require('./ToPromise'),
 	While: require('./While'),
 };

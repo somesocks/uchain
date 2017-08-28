@@ -1,12 +1,9 @@
 
-const { catchWrapper } = require('./_base');
-const PassThrough = require('./PassThrough');
-
 /**
 * ```javascript
 *   let chain = InSeries(
 *     function(next, ...args) {...},
-*     PromiseWrapper(
+*     FromPromise(
 *       (...args) => new Promise((resolve, reject) => resolve(...args))
 *     ),
 *     function(next, ...args) {},
@@ -15,27 +12,13 @@ const PassThrough = require('./PassThrough');
 *
 *   chain(next, ...args);
 * ```
+* Alias for PromiseWrapper
 * Wraps around a promise generator function,
 * to make it easier to integrate with task functions.
 * @param {function} generator - a function that generates a promise from the args.
 * @returns {taskFunction} a task that wraps around the promise
 * @memberof uchain
 */
-const PromiseWrapper = (promiseGenerator) => {
-	if (promiseGenerator == null) {
-		return PassThrough;
-	}
+const FromPromise = require('./PromiseWrapper');
 
-	const promiseWrapper = (next, ...args) => {
-		const promise = promiseGenerator(...args);
-		return promise
-			.then(
-				(...res) => next(null, ...res),
-				next
-			);
-	};
-
-	return catchWrapper(promiseWrapper);
-};
-
-module.exports = PromiseWrapper;
+module.exports = FromPromise;
