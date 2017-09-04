@@ -35,6 +35,7 @@ module.exports = {
 	Promisify: require('./Promisify'),
 	Race: require('./Race'),
 	Throttle: require('./Throttle'),
+	Timeout: require('./Timeout'),
 	Timer: require('./Timer'),
 	ToPromise: require('./ToPromise'),
 	While: require('./While'),
