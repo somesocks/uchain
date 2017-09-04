@@ -70,6 +70,8 @@ The utilities provided in the library generate next functions to bind your tasks
     * [.Promisify(task)](#uchain.Promisify) ⇒ <code>function</code>
     * [.Race(...tasks)](#uchain.Race) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.Throttle(task, limit)](#uchain.Throttle) ⇒ <code>[taskFunction](#taskFunction)</code>
+    * [.TimeIn(task, ms)](#uchain.TimeIn) ⇒ <code>[taskFunction](#taskFunction)</code>
+    * [.TimeOut(task, ms)](#uchain.TimeOut) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.Timer(task, label)](#uchain.Timer) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.While(conditionTask, loopTask)](#uchain.While) ⇒ <code>[taskFunction](#taskFunction)</code>
 
@@ -544,6 +546,60 @@ Requests are queued up in an unbounded FIFO queue until they can be run.
 | --- | --- | --- |
 | task | <code>[taskFunction](#taskFunction)</code> | the task to throttle |
 | limit | <code>number</code> | the number of instances that can run in parallel. default 1. |
+
+
+* * *
+
+<a name="uchain.TimeIn"></a>
+
+### uchain.TimeIn(task, ms) ⇒ <code>[taskFunction](#taskFunction)</code>
+```javascript
+  let chain = TimeIn(
+    function(next, ...args) {},
+			1000
+  );
+
+  chain(next, ...args);
+```
+
+TimeIn wraps a single task function, and returns a function that only returns after X ms.
+
+**Kind**: static method of <code>[uchain](#uchain)</code>  
+**Returns**: <code>[taskFunction](#taskFunction)</code> - a task  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| task | <code>[taskFunction](#taskFunction)</code> | the task to wrap in a timeout. |
+| ms | <code>number</code> | the timein in ms. |
+
+
+* * *
+
+<a name="uchain.TimeOut"></a>
+
+### uchain.TimeOut(task, ms) ⇒ <code>[taskFunction](#taskFunction)</code>
+```javascript
+  let chain = TimeOut(
+    function(next, ...args) {},
+			1000
+  );
+
+  chain(next, ...args);
+```
+
+TimeOut wraps a single task function, and returns a function that returns early if the task fails to complete before the timeout triggers.
+
+NOTE: no error is thrown on a timeout, the result is merely undefined.
+
+NOTE: the timeout being triggered will not cancel the original task.
+
+**Kind**: static method of <code>[uchain](#uchain)</code>  
+**Returns**: <code>[taskFunction](#taskFunction)</code> - a task  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| task | <code>[taskFunction](#taskFunction)</code> | the task to wrap in a timeout. |
+| ms | <code>number</code> | the timeout in ms. |
 
 
 * * *

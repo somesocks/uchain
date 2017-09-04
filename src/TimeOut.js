@@ -7,7 +7,7 @@ const PassThrough = require('./PassThrough');
 /**
 *
 * ```javascript
-*   let chain = Timeout(
+*   let chain = TimeOut(
 *     function(next, ...args) {},
 *			1000
 *   );
@@ -15,7 +15,7 @@ const PassThrough = require('./PassThrough');
 *   chain(next, ...args);
 * ```
 *
-* Timeout wraps a single task function, and returns a function that returns early if the task fails to complete before the timeout triggers.
+* TimeOut wraps a single task function, and returns a function that returns early if the task fails to complete before the timeout triggers.
 *
 * NOTE: no error is thrown on a timeout, the result is merely undefined.
 *
@@ -26,9 +26,9 @@ const PassThrough = require('./PassThrough');
 * @returns {taskFunction} a task
 * @memberof uchain
 */
-const Timeout = (task = PassThrough, ms = 1000) => Race(
+const TimeOut = (task = PassThrough, ms = 1000) => Race(
 	(next) => setTimeout(next, ms),
 	task
 );
 
-module.exports = Timeout;
+module.exports = TimeOut;
