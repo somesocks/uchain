@@ -1,40 +1,6 @@
 const PassThrough = require('./PassThrough');
 
-class Queue {
-	constructor() {
-		this._queue = {};
-		this.head = 0;
-		this.tail = 0;
-		this.churn = 0;
-
-		this.push = this.push.bind(this);
-		this.pop = this.pop.bind(this);
-		this.length = this.length.bind(this);
-
-		return this;
-	}
-
-	push(thing) {
-		this._queue[this.head] = thing;
-		this.head++;
-		return this;
-	}
-
-	pop() {
-		if (this.head > this.tail) {
-			const thing = this._queue[this.tail];
-			this._queue[this.tail] = null;
-			this.tail++;
-			this.churn++;
-
-			return thing;
-		} else {
-			return null;
-		}
-	}
-
-	length() { return this.head - this.tail; }
-}
+const Queue = require('./Queue');
 
 /**
 * Wraps a task and ensures that only X number of instances of the task can be run in parallel.
