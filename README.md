@@ -69,6 +69,7 @@ The utilities provided in the library generate next functions to bind your tasks
     * [.PromiseWrapper(generator)](#uchain.PromiseWrapper) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.Promisify(task)](#uchain.Promisify) ⇒ <code>function</code>
     * [.Race(...tasks)](#uchain.Race) ⇒ <code>[taskFunction](#taskFunction)</code>
+    * [.Retry(task, options)](#uchain.Retry) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.Throttle(task, limit)](#uchain.Throttle) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.TimeIn(task, ms)](#uchain.TimeIn) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.TimeOut(task, ms)](#uchain.TimeOut) ⇒ <code>[taskFunction](#taskFunction)</code>
@@ -529,6 +530,24 @@ Race accepts a number of functions, and returns a task function that executes al
 | Param | Type | Description |
 | --- | --- | --- |
 | ...tasks | <code>[taskFunction](#taskFunction)</code> | any number of tasks to run in parallel. |
+
+
+* * *
+
+<a name="uchain.Retry"></a>
+
+### uchain.Retry(task, options) ⇒ <code>[taskFunction](#taskFunction)</code>
+Wraps a task and attempts to retry if it throws an error, with an exponential backoff.
+
+**Kind**: static method of <code>[uchain](#uchain)</code>  
+**Returns**: <code>[taskFunction](#taskFunction)</code> - a task  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| task | <code>[taskFunction](#taskFunction)</code> | the task to wrap. |
+| options | <code>object</code> | an optional set of retry options. |
+| options.timeout | <code>object</code> | maximum time to attempt retries. |
+| options.retries | <code>object</code> | maximum number of retries to attempt. |
 
 
 * * *
