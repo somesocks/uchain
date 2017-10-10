@@ -17,6 +17,14 @@
 * @param {...*} args
 */
 
+/**
+* A string building function.
+*
+* @callback stringBuilder
+* @param {...*} args
+* @returns {string} the string
+*/
+
 module.exports = {
 	Assert: require('./Assert'),
 	CatchError: require('./CatchError'),

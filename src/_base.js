@@ -17,6 +17,19 @@ const once = function (func) {
 	};
 };
 
+const isString = (val) => (typeof val === 'string') || (val instanceof String);
+
+const isFunction = (val) => typeof val === 'function';
+
+const stringBuilder = (log) => {
+	const builder =
+		(isFunction(log) ? log : null) ||
+		(isString(log) ? () => log : null) ||
+		(() => '');
+
+	return builder;
+};
+
 // const defer = function () {
 // 	const args = arguments;
 // 	console.log('defer args', args, args.length);
@@ -43,4 +56,5 @@ module.exports = {
 	once,
 	defer,
 	catchWrapper,
+	stringBuilder,
 };

@@ -2,8 +2,8 @@
 const path = require('path');
 const Webpack = require('webpack');
 
-const SRC_DIR = path.normalize(__dirname + '/src');
-const DIST_DIR = path.normalize(__dirname + '/dist');
+const SRC_DIR = path.normalize(__dirname + '/../src');
+const DIST_DIR = path.normalize(__dirname + '/../dist');
 
 const plugins = [
 	new Webpack.optimize.UglifyJsPlugin({ mangle: true, compress: {}, output: { comments: false } }),
@@ -15,7 +15,7 @@ const CONFIG = {
 	},
 	output: {
 		path: DIST_DIR,
-		filename: '[name].js',
+		filename: '[name].min.js',
 		library: '[name]',
 		libraryTarget: 'umd',
 	},
@@ -26,7 +26,7 @@ const CONFIG = {
 				exclude: /node_modules/,
 				loader: 'babel',
 				query: {
-					presets: ['es2015'],
+					presets: [ 'es2015' ],
 				},
 			},
 		],

@@ -44,6 +44,9 @@ The utilities provided in the library generate next functions to bind your tasks
 <dt><a href="#taskFunction">taskFunction</a> : <code>function</code></dt>
 <dd><p>An async task function.</p>
 </dd>
+<dt><a href="#stringBuilder">stringBuilder</a> ⇒ <code>string</code></dt>
+<dd><p>A string building function.</p>
+</dd>
 </dl>
 
 <a name="uchain"></a>
@@ -59,7 +62,7 @@ The utilities provided in the library generate next functions to bind your tasks
     * [.If(conditionTask, thenTask, elseTask)](#uchain.If) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.InParallel(...tasks)](#uchain.InParallel) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.InSeries(...tasks)](#uchain.InSeries) ⇒ <code>[taskFunction](#taskFunction)</code>
-    * [.Logging(label)](#uchain.Logging) ⇒ <code>[taskFunction](#taskFunction)</code>
+    * [.Logging(statement)](#uchain.Logging) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.ParallelFilter(filter)](#uchain.ParallelFilter) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.ParallelForEach(task)](#uchain.ParallelForEach) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.ParallelMap(task)](#uchain.ParallelMap) ⇒ <code>[taskFunction](#taskFunction)</code>
@@ -159,7 +162,7 @@ Assert passes an error to its callback.
 | Param | Type | Description |
 | --- | --- | --- |
 | validator | <code>function</code> | a function that checks the arguments. |
-| message | <code>string</code> | an optional error message to throw if the assertion fails. |
+| message | <code>string</code> | an optional error message to throw if the assertion fails, or a message builder function. |
 
 
 * * *
@@ -331,7 +334,7 @@ This works similarly to the 'waterfall' method in caolan's async.
 
 <a name="uchain.Logging"></a>
 
-### uchain.Logging(label) ⇒ <code>[taskFunction](#taskFunction)</code>
+### uchain.Logging(statement) ⇒ <code>[taskFunction](#taskFunction)</code>
 Logs the arguments passed into the task, and then passes them along.
 
 **Kind**: static method of <code>[uchain](#uchain)</code>  
@@ -339,7 +342,7 @@ Logs the arguments passed into the task, and then passes them along.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| label | <code>string</code> | an optional tag for the label. |
+| statement | <code>string</code> \| <code>[stringBuilder](#stringBuilder)</code> | a string, or string builder function |
 
 
 * * *
@@ -700,6 +703,21 @@ An async task function.
 | Param | Type |
 | --- | --- |
 | next | <code>[nextFunction](#nextFunction)</code> | 
+| ...args | <code>\*</code> | 
+
+
+* * *
+
+<a name="stringBuilder"></a>
+
+## stringBuilder ⇒ <code>string</code>
+A string building function.
+
+**Kind**: global typedef  
+**Returns**: <code>string</code> - the string  
+
+| Param | Type |
+| --- | --- |
 | ...args | <code>\*</code> | 
 
 

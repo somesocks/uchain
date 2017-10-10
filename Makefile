@@ -8,11 +8,18 @@ help:
 	@echo "	make test - run the test cases against the build"
 	@echo "	make docs - regenerate the docs"
 
-build:
+build-dir:
 	mkdir -p ./dist
-	NODE_MODULES=. webpack --config=./webpack.js
 
-test: build
+plain-build: build-dir
+	NODE_MODULES=. webpack --config=./config/webpack.js
+
+min-build: build-dir
+	NODE_MODULES=. webpack --config=./config/webpack-min.js
+
+build: plain-build min-build
+
+test: plain-build
 	(export NODE_PATH=./; find ./src -name '*.tests.js' | xargs mocha --timeout 10000 $(ARGS))
 
 docs:

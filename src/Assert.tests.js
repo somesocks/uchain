@@ -7,12 +7,12 @@ const { optional, exists, isBoolean, isNumber } = Valid;
 const { matches } = Valid.Object;
 
 describe('Assert', () => {
-	it('Assert 1', (done) => {
-		const chain = InSeries(
+	it('Assert 1',
+		InSeries(
 			(next) => next(null, true),
 			Assert(matches([ isBoolean ]))
-		)(done);
-	});
+		)
+	);
 
 	it('Assert 2', (done) => {
 		const chain = InSeries(
@@ -21,8 +21,18 @@ describe('Assert', () => {
 		)((err) => done(err != null ? null : err));
 	});
 
-	it('Assert 2', (done) => {
+	it('Assert 3', (done) => {
 		const chain = Assert(matches(optional(exists)));
 		chain(done);
 	});
+
+	it('Assert 4',
+		InSeries(
+			(next) => next(null, true),
+			CatchError(
+				Assert(([ val ]) => val === false, (val) => `val should be false, is ${val}`)
+			),
+			Assert(matches([ exists ]))
+		)
+	);
 });

@@ -43,6 +43,13 @@ describe('InSeries tests', () => {
 		)((err, res) => done(err != null ? null : err));
 	});
 
+	it('catches errors 2', (done) => {
+		InSeries(
+			(next) => next(),
+			(next) => { throw new Error('error'); }
+		)((err, res) => done(err != null ? null : err));
+	});
+
 	it('callback shouldnt get called', (done) => {
 		InSeries(
 			(next) => {}
@@ -64,5 +71,4 @@ describe('InSeries tests', () => {
 			Logging('Error Stack')
 		)
 	);
-
 });
