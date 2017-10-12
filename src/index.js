@@ -32,6 +32,7 @@ module.exports = {
 	If: require('./If'),
 	InParallel: require('./InParallel'),
 	InSeries: require('./InSeries'),
+	InOrder: require('./InOrder'),
 	Logging: require('./Logging'),
 	ParallelFilter: require('./ParallelFilter'),
 	ParallelForEach: require('./ParallelForEach'),

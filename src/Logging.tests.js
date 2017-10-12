@@ -14,4 +14,14 @@ describe('Logging', () => {
 	it('Logging with function', (done) => {
 		Logging((...args) => `${args}`)(done, 1, 2, 3);
 	});
+
+	it('Logging with multiple statements function', (done) => {
+		Logging(
+			'Logging test',
+			(...args) => `${args[0]}`,
+			(...args) => `${args[1]}`,
+			(...args) => `${args[2]}`,
+			(...args) => `${args}`
+		)(done, 1, 2, 3);
+	});
 });

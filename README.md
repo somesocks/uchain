@@ -60,9 +60,10 @@ The utilities provided in the library generate next functions to bind your tasks
     * [.Assert(validator, message)](#uchain.Assert) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.CatchError(task)](#uchain.CatchError) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.If(conditionTask, thenTask, elseTask)](#uchain.If) ⇒ <code>[taskFunction](#taskFunction)</code>
+    * [.InOrder(...tasks)](#uchain.InOrder) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.InParallel(...tasks)](#uchain.InParallel) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.InSeries(...tasks)](#uchain.InSeries) ⇒ <code>[taskFunction](#taskFunction)</code>
-    * [.Logging(statement)](#uchain.Logging) ⇒ <code>[taskFunction](#taskFunction)</code>
+    * [.Logging(...statements)](#uchain.Logging) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.ParallelFilter(filter)](#uchain.ParallelFilter) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.ParallelForEach(task)](#uchain.ParallelForEach) ⇒ <code>[taskFunction](#taskFunction)</code>
     * [.ParallelMap(task)](#uchain.ParallelMap) ⇒ <code>[taskFunction](#taskFunction)</code>
@@ -255,6 +256,39 @@ note: the conditionTask can return multiple results, but only the first is check
 
 * * *
 
+<a name="uchain.InOrder"></a>
+
+### uchain.InOrder(...tasks) ⇒ <code>[taskFunction](#taskFunction)</code>
+```javascript
+  let chain = InOrder(
+    function(next, ...args) {},
+    function(next, ...args) {},
+    ...
+  );
+
+  chain(next, ...args);
+```
+Runs several asynchronous tasks one after another.
+Each task gets the arguments that were originally passed into the wrapper.
+This is different from InSeries, where the output of each is task is passed as the input to the next.
+```javascript
+  let chain = InOrder(
+    (next, a) => { a.val = 1; console.log(a.val); next();}
+    (next) => { a.val = 2; console.log(a.val); next();}
+    (next) => { a.val = 3; console.log(a.val); next();}
+  )(null, {}); // prints out 1 2 3, eventually
+```
+
+**Kind**: static method of <code>[uchain](#uchain)</code>  
+**Returns**: <code>[taskFunction](#taskFunction)</code> - a wrapper function that runs the tasks in order  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| ...tasks | <code>[taskFunction](#taskFunction)</code> | any number of tasks to run in order. |
+
+
+* * *
+
 <a name="uchain.InParallel"></a>
 
 ### uchain.InParallel(...tasks) ⇒ <code>[taskFunction](#taskFunction)</code>
@@ -323,7 +357,7 @@ This works similarly to the 'waterfall' method in caolan's async.
 ```
 
 **Kind**: static method of <code>[uchain](#uchain)</code>  
-**Returns**: <code>[taskFunction](#taskFunction)</code> - a wrapper function that runs the tasks in parallel  
+**Returns**: <code>[taskFunction](#taskFunction)</code> - a wrapper function that runs the tasks in series  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -334,15 +368,16 @@ This works similarly to the 'waterfall' method in caolan's async.
 
 <a name="uchain.Logging"></a>
 
-### uchain.Logging(statement) ⇒ <code>[taskFunction](#taskFunction)</code>
-Logs the arguments passed into the task, and then passes them along.
+### uchain.Logging(...statements) ⇒ <code>[taskFunction](#taskFunction)</code>
+A logging utility.
+It passes the arguments received into all the statements, collects the results, and joins them together with newlines to build the final log statement
 
 **Kind**: static method of <code>[uchain](#uchain)</code>  
 **Returns**: <code>[taskFunction](#taskFunction)</code> - a logging task  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| statement | <code>string</code> \| <code>[stringBuilder](#stringBuilder)</code> | a string, or string builder function |
+| ...statements | <code>string</code> \| <code>[stringBuilder](#stringBuilder)</code> | any number of strings, or string builder functions |
 
 
 * * *

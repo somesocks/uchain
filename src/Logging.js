@@ -1,20 +1,29 @@
 
 const { nop, noarr, stringBuilder } = require('./_base');
 
+const DEFAULT = ((...args) => `Logging [ ${args} ]`);
+
 /**
-* Logs the arguments passed into the task, and then passes them along.
-* @param {(string|stringBuilder)} statement - a string, or string builder function
+* A logging utility.
+* It passes the arguments received into all the statements, collects the results, and joins them together with newlines to build the final log statement
+* @param {...(string|stringBuilder)} statements - any number of strings, or string builder functions
 * @returns {taskFunction} a logging task
 * @memberof uchain
 */
-const Logging = (statement) => {
-	statement = statement || ((...args) => `Logging [ ${args} ]`);
-	statement = stringBuilder(statement);
+const Logging = (...statements) => {
+	statements = statements || [ DEFAULT ];
+	statements = statements.map(stringBuilder);
 
 	return (next, ...args) => {
 		args = args || noarr;
 		next = next || nop;
-		console.log(statement(...args));
+
+		const log = statements
+			.map(s => s(...args))
+			.join('\n');
+
+		console.log(log);
+
 		next(null, ...args);
 	};
 };

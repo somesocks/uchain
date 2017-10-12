@@ -5,7 +5,7 @@ const EMPTY = function (next) { return (next || nop)(); };
 
 /**
 * ```javascript
-*   let chain = InSeries(
+*   let chain = InOrder(
 *     function(next, ...args) {},
 *     function(next, ...args) {},
 *     ...
@@ -13,26 +13,21 @@ const EMPTY = function (next) { return (next || nop)(); };
 *
 *   chain(next, ...args);
 * ```
-* Runs several tasks in series, and passes the results from one down to the next.
-* This works similarly to the 'waterfall' method in caolan's async.
+* Runs several asynchronous tasks one after another.
+* Each task gets the arguments that were originally passed into the wrapper.
+* This is different from InSeries, where the output of each is task is passed as the input to the next.
 * ```javascript
-*   let chain = InSeries(
-*     (next) => { console.log(1); next();}
-*     InSeries(
-*       (next) => { console.log(2); next();}
-*       (next) => { console.log(3); next();}
-*     ),
-*     InSeries(
-*       (next) => { console.log(4); next();}
-*       (next) => { console.log(5); next();}
-*     )
-*   )(); // prints out 1 2 3 4 5, eventually
+*   let chain = InOrder(
+*     (next, a) => { a.val = 1; console.log(a.val); next();}
+*     (next) => { a.val = 2; console.log(a.val); next();}
+*     (next) => { a.val = 3; console.log(a.val); next();}
+*   )(null, {}); // prints out 1 2 3, eventually
 ```
-* @param {...taskFunction} tasks - any number of tasks to run in series.
-* @returns {taskFunction} a wrapper function that runs the tasks in series
+* @param {...taskFunction} tasks - any number of tasks to run in order.
+* @returns {taskFunction} a wrapper function that runs the tasks in order
 * @memberof uchain
 */
-const InSeries = function () {
+const InOrder = function () {
 	const handlers = arguments;
 
 	if (handlers.length === 0) {
@@ -46,11 +41,13 @@ const InSeries = function () {
 		let index = 0;
 
 		const worker = function () {
-			const args = arguments;
+			const args2 = arguments;
 
-			if (args[0] != null) {
+			if (args2[0] != null) {
+				args[0] = args2[0];
 				next.apply(undefined, args);
 			} else if (index >= handlers.length) {
+				args[0] = undefined;
 				next.apply(undefined, args);
 			} else {
 				const handler = catchWrapper(handlers[index++])
@@ -69,4 +66,4 @@ const InSeries = function () {
 	return series;
 };
 
-module.exports = InSeries;
+module.exports = InOrder;

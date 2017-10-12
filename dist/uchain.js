@@ -96,23 +96,24 @@ return /******/ (function(modules) { // webpackBootstrap
 		If: __webpack_require__(11),
 		InParallel: __webpack_require__(12),
 		InSeries: __webpack_require__(13),
-		Logging: __webpack_require__(14),
-		ParallelFilter: __webpack_require__(15),
-		ParallelForEach: __webpack_require__(17),
-		ParallelMap: __webpack_require__(16),
-		ParallelObjectFilter: __webpack_require__(18),
-		ParallelObjectMap: __webpack_require__(19),
+		InOrder: __webpack_require__(14),
+		Logging: __webpack_require__(15),
+		ParallelFilter: __webpack_require__(16),
+		ParallelForEach: __webpack_require__(18),
+		ParallelMap: __webpack_require__(17),
+		ParallelObjectFilter: __webpack_require__(19),
+		ParallelObjectMap: __webpack_require__(20),
 		PassThrough: __webpack_require__(10),
 		PromiseWrapper: __webpack_require__(9),
-		Promisify: __webpack_require__(20),
-		Race: __webpack_require__(21),
-		Retry: __webpack_require__(22),
-		Throttle: __webpack_require__(23),
-		TimeIn: __webpack_require__(25),
-		TimeOut: __webpack_require__(26),
-		Timer: __webpack_require__(27),
-		ToPromise: __webpack_require__(28),
-		While: __webpack_require__(29)
+		Promisify: __webpack_require__(21),
+		Race: __webpack_require__(22),
+		Retry: __webpack_require__(23),
+		Throttle: __webpack_require__(24),
+		TimeIn: __webpack_require__(26),
+		TimeOut: __webpack_require__(27),
+		Timer: __webpack_require__(28),
+		ToPromise: __webpack_require__(29),
+		While: __webpack_require__(30)
 	};
 
 /***/ }),
@@ -1078,7 +1079,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	*   )(); // prints out 1 2 3 4 5, eventually
 	```
 	* @param {...taskFunction} tasks - any number of tasks to run in series.
-	* @returns {taskFunction} a wrapper function that runs the tasks in parallel
+	* @returns {taskFunction} a wrapper function that runs the tasks in series
 	* @memberof uchain
 	*/
 	var InSeries = function InSeries() {
@@ -1125,44 +1126,79 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 	var _require = __webpack_require__(3),
-	    nop = _require.nop,
-	    noarr = _require.noarr,
-	    stringBuilder = _require.stringBuilder;
+	    defer = _require.defer,
+	    once = _require.once,
+	    catchWrapper = _require.catchWrapper,
+	    nop = _require.nop;
 
-	/**
-	* Logs the arguments passed into the task, and then passes them along.
-	* @param {(string|stringBuilder)} statement - a string, or string builder function
-	* @returns {taskFunction} a logging task
-	* @memberof uchain
-	*/
-
-
-	var Logging = function Logging(statement) {
-		statement = statement || function () {
-			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-				args[_key] = arguments[_key];
-			}
-
-			return 'Logging [ ' + args + ' ]';
-		};
-		statement = stringBuilder(statement);
-
-		return function (next) {
-			for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-				args[_key2 - 1] = arguments[_key2];
-			}
-
-			args = args || noarr;
-			next = next || nop;
-			console.log(statement.apply(undefined, _toConsumableArray(args)));
-			next.apply(undefined, [null].concat(_toConsumableArray(args)));
-		};
+	var EMPTY = function EMPTY(next) {
+		return (next || nop)();
 	};
 
-	module.exports = Logging;
+	/**
+	* ```javascript
+	*   let chain = InOrder(
+	*     function(next, ...args) {},
+	*     function(next, ...args) {},
+	*     ...
+	*   );
+	*
+	*   chain(next, ...args);
+	* ```
+	* Runs several asynchronous tasks one after another.
+	* Each task gets the arguments that were originally passed into the wrapper.
+	* This is different from InSeries, where the output of each is task is passed as the input to the next.
+	* ```javascript
+	*   let chain = InOrder(
+	*     (next, a) => { a.val = 1; console.log(a.val); next();}
+	*     (next) => { a.val = 2; console.log(a.val); next();}
+	*     (next) => { a.val = 3; console.log(a.val); next();}
+	*   )(null, {}); // prints out 1 2 3, eventually
+	```
+	* @param {...taskFunction} tasks - any number of tasks to run in order.
+	* @returns {taskFunction} a wrapper function that runs the tasks in order
+	* @memberof uchain
+	*/
+	var InOrder = function InOrder() {
+		var handlers = arguments;
+
+		if (handlers.length === 0) {
+			return EMPTY;
+		}
+
+		var series = function series(next) {
+			var args = arguments;
+			next = once(next);
+
+			var index = 0;
+
+			var worker = function worker() {
+				var args2 = arguments;
+
+				if (args2[0] != null) {
+					args[0] = args2[0];
+					next.apply(undefined, args);
+				} else if (index >= handlers.length) {
+					args[0] = undefined;
+					next.apply(undefined, args);
+				} else {
+					var handler = catchWrapper(handlers[index++]).bind(undefined, once(worker));
+
+					args[0] = handler;
+					args.length = args.length || 1;
+					defer.apply(undefined, args);
+				}
+			};
+
+			args[0] = undefined;
+			worker.apply(undefined, args);
+		};
+
+		return series;
+	};
+
+	module.exports = InOrder;
 
 /***/ }),
 /* 15 */
@@ -1174,10 +1210,66 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _require = __webpack_require__(3),
 	    nop = _require.nop,
+	    noarr = _require.noarr,
+	    stringBuilder = _require.stringBuilder;
+
+	var DEFAULT = function DEFAULT() {
+		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+			args[_key] = arguments[_key];
+		}
+
+		return 'Logging [ ' + args + ' ]';
+	};
+
+	/**
+	* A logging utility.
+	* It passes the arguments received into all the statements, collects the results, and joins them together with newlines to build the final log statement
+	* @param {...(string|stringBuilder)} statements - any number of strings, or string builder functions
+	* @returns {taskFunction} a logging task
+	* @memberof uchain
+	*/
+	var Logging = function Logging() {
+		for (var _len2 = arguments.length, statements = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+			statements[_key2] = arguments[_key2];
+		}
+
+		statements = statements || [DEFAULT];
+		statements = statements.map(stringBuilder);
+
+		return function (next) {
+			for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+				args[_key3 - 1] = arguments[_key3];
+			}
+
+			args = args || noarr;
+			next = next || nop;
+
+			var log = statements.map(function (s) {
+				return s.apply(undefined, _toConsumableArray(args));
+			}).join('\n');
+
+			console.log(log);
+
+			next.apply(undefined, [null].concat(_toConsumableArray(args)));
+		};
+	};
+
+	module.exports = Logging;
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	var _require = __webpack_require__(3),
+	    nop = _require.nop,
 	    noarr = _require.noarr;
 
 	var InSeries = __webpack_require__(13);
-	var ParallelMap = __webpack_require__(16);
+	var ParallelMap = __webpack_require__(17);
 
 	/**
 	* Builds a task that filters all of its arguments in parallel, and returns the results
@@ -1211,7 +1303,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ParallelFilter;
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1264,7 +1356,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ParallelMap;
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1308,7 +1400,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ParallelForEach;
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1372,7 +1464,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ParallelObjectFilter;
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1434,7 +1526,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ParallelObjectMap;
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1510,7 +1602,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Promisify;
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1589,7 +1681,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Race;
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1652,7 +1744,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Retry;
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1661,7 +1753,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var PassThrough = __webpack_require__(10);
 
-	var Queue = __webpack_require__(24);
+	var Queue = __webpack_require__(25);
 
 	/**
 	* Wraps a task and ensures that only X number of instances of the task can be run in parallel.
@@ -1707,7 +1799,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Throttle;
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -1769,7 +1861,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Queue;
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1818,7 +1910,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = TimeIn;
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1830,7 +1922,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    nop = _require.nop,
 	    noarr = _require.noarr;
 
-	var Race = __webpack_require__(21);
+	var Race = __webpack_require__(22);
 	var PassThrough = __webpack_require__(10);
 
 	/**
@@ -1866,7 +1958,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = TimeOut;
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1917,7 +2009,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Timer;
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1953,12 +2045,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	* @returns {function} a function that generates a Promise when called
 	* @memberof uchain
 	*/
-	var ToPromise = __webpack_require__(20);
+	var ToPromise = __webpack_require__(21);
 
 	module.exports = ToPromise;
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
