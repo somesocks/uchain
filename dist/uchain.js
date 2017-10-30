@@ -128,7 +128,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    nop = _require.nop,
 	    noarr = _require.noarr,
 	    catchWrapper = _require.catchWrapper,
-	    stringBuilder = _require.stringBuilder;
+	    isFunction = _require.isFunction,
+	    isString = _require.isString;
+
+	var stringBuilder = function stringBuilder(log) {
+		var builder = (isFunction(log) ? log : null) || (isString(log) ? function () {
+			return log;
+		} : null) || function () {
+			return '';
+		};
+
+		return builder;
+	};
 
 	/**
 	* Builds an async assertion task.  When called, if the arguments do not match the validator functions,
@@ -138,8 +149,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	* @returns {taskFunction} an assertion task
 	* @memberof uchain
 	*/
-
-
 	var Assert = function Assert(validator, message) {
 		validator = validator || nop;
 		message = message || 'uchain assert failed';
@@ -192,16 +201,6 @@ return /******/ (function(modules) { // webpackBootstrap
 		return typeof val === 'function';
 	};
 
-	var stringBuilder = function stringBuilder(log) {
-		var builder = (isFunction(log) ? log : null) || (isString(log) ? function () {
-			return log;
-		} : null) || function () {
-			return '';
-		};
-
-		return builder;
-	};
-
 	// const defer = function () {
 	// 	const args = arguments;
 	// 	console.log('defer args', args, args.length);
@@ -228,7 +227,8 @@ return /******/ (function(modules) { // webpackBootstrap
 		once: once,
 		defer: defer,
 		catchWrapper: catchWrapper,
-		stringBuilder: stringBuilder
+		isString: isString,
+		isFunction: isFunction
 	};
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4).setImmediate))
 
@@ -1211,7 +1211,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _require = __webpack_require__(3),
 	    nop = _require.nop,
 	    noarr = _require.noarr,
-	    stringBuilder = _require.stringBuilder;
+	    isFunction = _require.isFunction;
 
 	var DEFAULT = function DEFAULT() {
 		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
@@ -1221,10 +1221,17 @@ return /******/ (function(modules) { // webpackBootstrap
 		return 'Logging [ ' + args + ' ]';
 	};
 
+	var logWrapper = function logWrapper(log) {
+		var wrapper = (isFunction(log) ? log : null) || function () {
+			return log;
+		};
+		return wrapper;
+	};
+
 	/**
 	* A logging utility.
 	* It passes the arguments received into all the statements, collects the results, and joins them together with newlines to build the final log statement
-	* @param {...(string|stringBuilder)} statements - any number of strings, or string builder functions
+	* @param {...} statements - any number of logging values.  Functions are called with the calling arguments, everything else is passed directly to
 	* @returns {taskFunction} a logging task
 	* @memberof uchain
 	*/
@@ -1234,9 +1241,11 @@ return /******/ (function(modules) { // webpackBootstrap
 		}
 
 		statements = statements || [DEFAULT];
-		statements = statements.map(stringBuilder);
+		statements = statements.map(logWrapper);
 
 		return function (next) {
+			var _console;
+
 			for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
 				args[_key3 - 1] = arguments[_key3];
 			}
@@ -1246,9 +1255,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			var log = statements.map(function (s) {
 				return s.apply(undefined, _toConsumableArray(args));
-			}).join('\n');
+			});
 
-			console.log(log);
+			(_console = console).log.apply(_console, _toConsumableArray(log));
 
 			next.apply(undefined, [null].concat(_toConsumableArray(args)));
 		};

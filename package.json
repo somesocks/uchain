@@ -1,6 +1,6 @@
 {
   "name": "uchain",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "A set of utilities for chaining asynchronous functions",
   "main": "dist",
   "scripts": {},

@@ -1,5 +1,14 @@
 
-const { nop, noarr, catchWrapper, stringBuilder } = require('./_base');
+const { nop, noarr, catchWrapper, isFunction, isString } = require('./_base');
+
+const stringBuilder = (log) => {
+	const builder =
+		(isFunction(log) ? log : null) ||
+		(isString(log) ? () => log : null) ||
+		(() => '');
+
+	return builder;
+};
 
 /**
 * Builds an async assertion task.  When called, if the arguments do not match the validator functions,

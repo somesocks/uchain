@@ -18,6 +18,9 @@ describe('Logging', () => {
 	it('Logging with multiple statements function', (done) => {
 		Logging(
 			'Logging test',
+			{ test: 1 },
+			1,
+			false,
 			(...args) => `${args[0]}`,
 			(...args) => `${args[1]}`,
 			(...args) => `${args[2]}`,
