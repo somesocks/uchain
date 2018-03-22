@@ -108,12 +108,13 @@ return /******/ (function(modules) { // webpackBootstrap
 		Promisify: __webpack_require__(21),
 		Race: __webpack_require__(22),
 		Retry: __webpack_require__(23),
-		Throttle: __webpack_require__(24),
-		TimeIn: __webpack_require__(26),
-		TimeOut: __webpack_require__(27),
-		Timer: __webpack_require__(28),
-		ToPromise: __webpack_require__(29),
-		While: __webpack_require__(30)
+		Switch: __webpack_require__(24),
+		Throttle: __webpack_require__(25),
+		TimeIn: __webpack_require__(27),
+		TimeOut: __webpack_require__(28),
+		Timer: __webpack_require__(29),
+		ToPromise: __webpack_require__(30),
+		While: __webpack_require__(31)
 	};
 
 /***/ }),
@@ -236,7 +237,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var apply = Function.prototype.apply;
+	/* WEBPACK VAR INJECTION */(function(global) {var apply = Function.prototype.apply;
 
 	// DOM APIs, for completeness
 
@@ -287,9 +288,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	// setimmediate attaches itself to the global object
 	__webpack_require__(5);
-	exports.setImmediate = setImmediate;
-	exports.clearImmediate = clearImmediate;
+	// On some exotic environments, it's not clear which object `setimmeidate` was
+	// able to install onto.  Search each possibility in the same order as the
+	// `setimmediate` library.
+	exports.setImmediate = (typeof self !== "undefined" && self.setImmediate) ||
+	                       (typeof global !== "undefined" && global.setImmediate) ||
+	                       (this && this.setImmediate);
+	exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
+	                         (typeof global !== "undefined" && global.clearImmediate) ||
+	                         (this && this.clearImmediate);
 
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ }),
 /* 5 */
@@ -1760,9 +1769,61 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+	var _require = __webpack_require__(3),
+	    once = _require.once,
+	    catchWrapper = _require.catchWrapper,
+	    noarr = _require.noarr;
+
 	var PassThrough = __webpack_require__(10);
 
-	var Queue = __webpack_require__(25);
+	/**
+	* Switch accepts a lookup task and a map.
+	* @param {taskFunction} lookupTask - a lookup task.
+	* @param {object} caseMap - a task to run if the condition returns a falsy value.
+	* @returns {taskFunction}
+	* @memberof uchain
+	*/
+	var Switch = function Switch(lookupTask, caseMap) {
+		lookupTask = lookupTask != null ? catchWrapper(lookupTask) : function (next) {
+			return next();
+		};
+		caseMap = caseMap || {};
+
+		return function (next) {
+			for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+				args[_key - 1] = arguments[_key];
+			}
+
+			next = next || once(next);
+			args = args || noarr;
+
+			var onLookup = function onLookup(err, key) {
+				if (err) {
+					next(err, key);
+					return;
+				}
+
+				var task = caseMap[key] || caseMap.default || PassThrough;
+				task.apply(undefined, [next].concat(_toConsumableArray(args)));
+			};
+
+			lookupTask.apply(undefined, [onLookup].concat(_toConsumableArray(args)));
+		};
+	};
+
+	module.exports = Switch;
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	var PassThrough = __webpack_require__(10);
+
+	var Queue = __webpack_require__(26);
 
 	/**
 	* Wraps a task and ensures that only X number of instances of the task can be run in parallel.
@@ -1808,7 +1869,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Throttle;
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -1870,7 +1931,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Queue;
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1919,7 +1980,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = TimeIn;
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1967,7 +2028,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = TimeOut;
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2018,7 +2079,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Timer;
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2059,7 +2120,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ToPromise;
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';

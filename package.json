@@ -1,8 +1,11 @@
 {
   "name": "uchain",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "A set of utilities for chaining asynchronous functions",
   "main": "dist",
+	"files": [
+		"dist"
+	],
   "scripts": {},
   "repository": {
     "type": "git",
@@ -12,7 +15,7 @@
     "async"
   ],
   "author": "James Larsen (somesocks@gmail.com)",
-  "license": "Apache v2",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/somesocks/uchain/issues"
   },
@@ -30,10 +33,9 @@
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.3",
     "mocha": "^3.2.0",
-		"setimmediate": "^1.0.5",
+    "setimmediate": "^1.0.5",
     "simple-validator": "^0.1.11",
     "webpack": "^1.14.0"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
