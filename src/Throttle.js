@@ -1,5 +1,7 @@
 const PassThrough = require('./PassThrough');
 
+const { defer, once, catchWrapper, nop } = require('./_base');
+
 const Queue = require('./Queue');
 
 /**
@@ -15,6 +17,8 @@ const Throttle = (task = PassThrough, limit = 1) => {
 	let running = 0;
 
 	const throttle = (next, ...rest) => {
+		next = once(next);
+
 		const after = (...results) => {
 			running--;
 			if (running < limit && queue.length() > 0) {

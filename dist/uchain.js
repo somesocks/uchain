@@ -1824,6 +1824,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var PassThrough = __webpack_require__(10);
 
+	var _require = __webpack_require__(3),
+	    defer = _require.defer,
+	    once = _require.once,
+	    catchWrapper = _require.catchWrapper,
+	    nop = _require.nop;
+
 	var Queue = __webpack_require__(26);
 
 	/**
@@ -1845,6 +1851,8 @@ return /******/ (function(modules) { // webpackBootstrap
 			for (var _len = arguments.length, rest = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
 				rest[_key - 1] = arguments[_key];
 			}
+
+			next = once(next);
 
 			var after = function after() {
 				running--;
