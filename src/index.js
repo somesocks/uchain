@@ -50,5 +50,6 @@ module.exports = {
 	TimeOut: require('./TimeOut'),
 	Timer: require('./Timer'),
 	ToPromise: require('./ToPromise'),
+	TryCatch: require('./TryCatch'),
 	While: require('./While'),
 };

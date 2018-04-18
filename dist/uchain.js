@@ -114,7 +114,8 @@ return /******/ (function(modules) { // webpackBootstrap
 		TimeOut: __webpack_require__(28),
 		Timer: __webpack_require__(29),
 		ToPromise: __webpack_require__(30),
-		While: __webpack_require__(31)
+		TryCatch: __webpack_require__(31),
+		While: __webpack_require__(32)
 	};
 
 /***/ }),
@@ -2121,6 +2122,126 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _require = __webpack_require__(3),
+	    catchWrapper = _require.catchWrapper,
+	    nop = _require.nop,
+	    noarr = _require.noarr;
+
+	var DEFAULT_TRY = function DEFAULT_TRY(next) {
+		for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+			args[_key - 1] = arguments[_key];
+		}
+
+		return next.apply(undefined, [null].concat(args));
+	};
+
+	var DEFAULT_CATCH = function DEFAULT_CATCH(next, err) {
+		for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+			args[_key2 - 2] = arguments[_key2];
+		}
+
+		return next.apply(undefined, [err].concat(args));
+	};
+
+	var DEFAULT_FINALLY = function DEFAULT_FINALLY(next, err) {
+		for (var _len3 = arguments.length, args = Array(_len3 > 2 ? _len3 - 2 : 0), _key3 = 2; _key3 < _len3; _key3++) {
+			args[_key3 - 2] = arguments[_key3];
+		}
+
+		return next.apply(undefined, [err].concat(args));
+	};
+
+	/**
+	* Errors bypass the normal flow of execution.  They always return to the last link in the chain, even if they occur inside nested InSeries or InParallel chains.
+	*
+	* ```javascript
+	*   let chain = InSeries(
+	*     (next) => { console.log(1); next(); }
+	*     InSeries(
+	*       (next) => { console.log(2); next(); }
+	*       (next) => { console.log(3); next('Error'); }
+	*     ),
+	*     InSeries(
+	*       (next) => { console.log(4); next();}
+	*       (next) => { console.log(5); next();}
+	*     )
+	*   )(console.log); // prints out 1 2 3 Error, eventually
+	* ```
+	*
+	* If you need to catch an error explicitly at some point, `wrap a chain in CatchError`, which will return the error as the first argument to the next function.
+	*
+	* ```javascript
+	*   let chain = InSeries(
+	*     (next) => { console.log(1); next();}
+	*     CatchError(
+	*       InSeries(
+	*         (next) => { console.log(2); next();}
+	*         (next) => { console.log(3); next('Error');}
+	*       ),
+	*     ),
+	*     (next, error) => error != null ? console.log('Error Caught') : null,
+	*     InSeries(
+	*       (next) => { console.log(4); next();}
+	*       (next) => { console.log(5); next();}
+	*     )
+	*   )(console.log); // prints out 1 2 3 Error Caught 4 5, eventually
+	* ```
+	*
+	* @param {taskFunction} _try
+	* @param {taskFunction} _catch
+	* @param {taskFunction} _finally
+	* @returns {taskFunction}
+	* @memberof uchain
+	*/
+	var TryCatch = function TryCatch(_try, _catch, _finally) {
+		_try = _try || DEFAULT_TRY;
+		_try = catchWrapper(_try);
+
+		_catch = _catch || DEFAULT_CATCH;
+		_catch = catchWrapper(_catch);
+
+		_finally = _finally || DEFAULT_FINALLY;
+		_finally = catchWrapper(_finally);
+
+		var wrapper = function wrapper(next) {
+			var onCatch = function onCatch(err) {
+				for (var _len5 = arguments.length, res = Array(_len5 > 1 ? _len5 - 1 : 0), _key5 = 1; _key5 < _len5; _key5++) {
+					res[_key5 - 1] = arguments[_key5];
+				}
+
+				_finally.apply(undefined, [next, err].concat(res));
+			};
+
+			var onTry = function onTry(err) {
+				for (var _len6 = arguments.length, res = Array(_len6 > 1 ? _len6 - 1 : 0), _key6 = 1; _key6 < _len6; _key6++) {
+					res[_key6 - 1] = arguments[_key6];
+				}
+
+				if (err) {
+					_catch.apply(undefined, [onCatch, err].concat(res));
+				} else {
+					_finally.apply(undefined, [next, err].concat(res));
+				}
+			};
+
+			for (var _len4 = arguments.length, args = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
+				args[_key4 - 1] = arguments[_key4];
+			}
+
+			_try.apply(undefined, [onTry].concat(args));
+		};
+
+		return wrapper;
+	};
+
+	module.exports = TryCatch;
+
+/***/ }),
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
