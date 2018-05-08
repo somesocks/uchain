@@ -39,6 +39,10 @@ const InSeries = function () {
 		return EMPTY;
 	}
 
+	for (let i = 0; i < handlers.length; i++) {
+		handlers[i] = catchWrapper(handlers[i]);
+	}
+
 	const series = function (next) {
 		const args = arguments;
 		next = once(next);
@@ -53,8 +57,7 @@ const InSeries = function () {
 			} else if (index >= handlers.length) {
 				next.apply(undefined, args);
 			} else {
-				const handler = catchWrapper(handlers[index++])
-					.bind(undefined, once(worker));
+				const handler = handlers[index++].bind(undefined, once(worker));
 
 				args[0] = handler;
 				args.length = args.length || 1;

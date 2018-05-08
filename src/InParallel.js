@@ -51,7 +51,7 @@ const InParallel = function () {
 		for (let i = 0; i < handlers.length; i++) {
 			const onDone = function (err, ...res) {
 				if (err) {
-					next(err);
+					next(err, ...res);
 				} else {
 					results[i + 1] = res;
 					done++;

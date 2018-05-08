@@ -238,15 +238,18 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {var apply = Function.prototype.apply;
+	/* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
+	            (typeof self !== "undefined" && self) ||
+	            window;
+	var apply = Function.prototype.apply;
 
 	// DOM APIs, for completeness
 
 	exports.setTimeout = function() {
-	  return new Timeout(apply.call(setTimeout, window, arguments), clearTimeout);
+	  return new Timeout(apply.call(setTimeout, scope, arguments), clearTimeout);
 	};
 	exports.setInterval = function() {
-	  return new Timeout(apply.call(setInterval, window, arguments), clearInterval);
+	  return new Timeout(apply.call(setInterval, scope, arguments), clearInterval);
 	};
 	exports.clearTimeout =
 	exports.clearInterval = function(timeout) {
@@ -261,7 +264,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	Timeout.prototype.unref = Timeout.prototype.ref = function() {};
 	Timeout.prototype.close = function() {
-	  this._clearFn.call(window, this._id);
+	  this._clearFn.call(scope, this._id);
 	};
 
 	// Does not start the time, just sets up the members needed.
@@ -289,7 +292,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	// setimmediate attaches itself to the global object
 	__webpack_require__(5);
-	// On some exotic environments, it's not clear which object `setimmeidate` was
+	// On some exotic environments, it's not clear which object `setimmediate` was
 	// able to install onto.  Search each possibility in the same order as the
 	// `setimmediate` library.
 	exports.setImmediate = (typeof self !== "undefined" && self.setImmediate) ||
@@ -1014,13 +1017,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			var _loop = function _loop(i) {
 				var onDone = function onDone(err) {
-					if (err) {
-						next(err);
-					} else {
-						for (var _len = arguments.length, res = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-							res[_key - 1] = arguments[_key];
-						}
+					for (var _len = arguments.length, res = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+						res[_key - 1] = arguments[_key];
+					}
 
+					if (err) {
+						next.apply(undefined, [err].concat(res));
+					} else {
 						results[i + 1] = res;
 						done++;
 						if (done === handlers.length) {
@@ -1099,6 +1102,10 @@ return /******/ (function(modules) { // webpackBootstrap
 			return EMPTY;
 		}
 
+		for (var i = 0; i < handlers.length; i++) {
+			handlers[i] = catchWrapper(handlers[i]);
+		}
+
 		var series = function series(next) {
 			var args = arguments;
 			next = once(next);
@@ -1113,7 +1120,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				} else if (index >= handlers.length) {
 					next.apply(undefined, args);
 				} else {
-					var handler = catchWrapper(handlers[index++]).bind(undefined, once(worker));
+					var handler = handlers[index++].bind(undefined, once(worker));
 
 					args[0] = handler;
 					args.length = args.length || 1;
