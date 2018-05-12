@@ -27,7 +27,7 @@ const Assert = (validator, message) => {
 		(next, ...args) => {
 			next = next || nop;
 			args = args || noarr;
-			const err = validator(args) ? null : new Error(message(...args));
+			const err = validator(...args) ? null : new Error(message(...args));
 			next(err, ...args);
 		}
 	);

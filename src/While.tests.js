@@ -23,7 +23,7 @@ describe('While', () => {
 				(next, num) => next(null, num < 10),
 				(next, num) => next(null, num + 1)
 			),
-			Assert((args) => args[0] === 10, 'Value not 10')
+			Assert((...args) => args[0] === 10, 'Value not 10')
 		)
 	);
 

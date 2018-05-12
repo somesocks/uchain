@@ -10,7 +10,7 @@ describe('Assert', () => {
 	it('Assert 1',
 		InSeries(
 			(next) => next(null, true),
-			Assert(matches([ isBoolean ]))
+			Assert((...args) => matches([ isBoolean ])(args))
 		)
 	);
 
@@ -22,7 +22,7 @@ describe('Assert', () => {
 	});
 
 	it('Assert 3', (done) => {
-		const chain = Assert(matches(optional(exists)));
+		const chain = Assert((...args) => matches(optional(exists))(...args));
 		chain(done);
 	});
 
@@ -30,9 +30,9 @@ describe('Assert', () => {
 		InSeries(
 			(next) => next(null, true),
 			CatchError(
-				Assert(([ val ]) => val === false, (val) => `val should be false, is ${val}`)
+				Assert((val) => val === false, (val) => `val should be false, is ${val}`)
 			),
-			Assert(matches([ exists ]))
+			Assert((...args) => matches([ exists ])(args))
 		)
 	);
 });

@@ -163,7 +163,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			next = next || nop;
 			args = args || noarr;
-			var err = validator(args) ? null : new Error(message.apply(undefined, _toConsumableArray(args)));
+			var err = validator.apply(undefined, _toConsumableArray(args)) ? null : new Error(message.apply(undefined, _toConsumableArray(args)));
 			next.apply(undefined, [err].concat(_toConsumableArray(args)));
 		});
 	};

@@ -15,7 +15,7 @@ describe('PromiseWrapper tests', () => {
 			PromiseWrapper(
 				(val) => new Promise((resolve, reject) => resolve(val))
 			),
-			Assert(([ val ]) => val === 2, 'PromiseWrapper failed to resolve')
+			Assert((val) => val === 2, 'PromiseWrapper failed to resolve')
 		)
 	);
 
@@ -28,7 +28,7 @@ describe('PromiseWrapper tests', () => {
 					(val) => new Promise((resolve, reject) => reject(val))
 				)
 			),
-			Assert(([ err ]) => err !== null, 'PromiseWrapper failed to reject')
+			Assert((err) => err !== null, 'PromiseWrapper failed to reject')
 		)
 	);
 
