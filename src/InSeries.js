@@ -1,5 +1,5 @@
 
-const { defer, once, catchWrapper, nop } = require('./_base');
+import { defer, onceWrapper, catchWrapper, nop } from './_common';
 
 const EMPTY = function (next) { return (next || nop)(); };
 
@@ -45,7 +45,7 @@ const InSeries = function () {
 
 	const series = function (next) {
 		const args = arguments;
-		next = once(next);
+		next = onceWrapper(next);
 
 		let index = 0;
 
@@ -57,7 +57,7 @@ const InSeries = function () {
 			} else if (index >= handlers.length) {
 				next.apply(undefined, args);
 			} else {
-				const handler = handlers[index++].bind(undefined, once(worker));
+				const handler = handlers[index++].bind(undefined, onceWrapper(worker));
 
 				args[0] = handler;
 				args.length = args.length || 1;
@@ -72,4 +72,4 @@ const InSeries = function () {
 	return series;
 };
 
-module.exports = InSeries;
+export default InSeries;

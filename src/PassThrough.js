@@ -1,5 +1,5 @@
 
-const { nop } = require('./_base');
+import { nop } from './_common';
 
 /**
 *
@@ -16,4 +16,4 @@ const PassThrough = function (next) {
 	next.apply(undefined, args);
 };
 
-module.exports = PassThrough;
+export default PassThrough;

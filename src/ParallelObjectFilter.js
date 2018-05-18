@@ -1,5 +1,5 @@
 
-const { defer, once, catchWrapper } = require('./_base');
+import { defer, onceWrapper, catchWrapper } from './_common';
 
 /**
 * Similar to ParallelFilter, but instead of running on an array of arguments, it runs a filter on every key-value pair in an object.
@@ -11,7 +11,7 @@ const ParallelObjectFilter = (mapping) => {
 	mapping = catchWrapper(mapping);
 
 	return (next, obj) => {
-		next = once(next);
+		next = onceWrapper(next);
 
 		let left = 0;
 		const results = {};
@@ -33,7 +33,7 @@ const ParallelObjectFilter = (mapping) => {
 					}
 				};
 
-				defer(mapping, once(onDone), key, val);
+				defer(mapping, onceWrapper(onDone), key, val);
 			}
 		}
 
@@ -43,4 +43,4 @@ const ParallelObjectFilter = (mapping) => {
 };
 
 
-module.exports = ParallelObjectFilter;
+export default ParallelObjectFilter;

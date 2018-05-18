@@ -1,4 +1,6 @@
-require('setimmediate');
+import 'setimmediate';
+
+const defer = setImmediate;
 
 const noarr = [];
 
@@ -8,18 +10,11 @@ const nop = (err) => {
 	}
 };
 
-const once = function (func) {
-	return function () {
-		const args = arguments;
-		const temp = func || nop;
-		func = nop;
-		temp.apply(undefined, args);
-	};
-};
-
 const isString = (val) => (typeof val === 'string') || (val instanceof String);
 
 const isFunction = (val) => typeof val === 'function';
+
+
 
 // const defer = function () {
 // 	const args = arguments;
@@ -27,7 +22,15 @@ const isFunction = (val) => typeof val === 'function';
 // 	setImmediate.apply(undefined, args);
 // };
 //
-const defer = setImmediate;
+
+const onceWrapper = function (func) {
+	return function () {
+		const args = arguments;
+		const temp = func || nop;
+		func = nop;
+		temp.apply(undefined, args);
+	};
+};
 
 const catchWrapper = function (func) {
 	return function (next) {
@@ -41,12 +44,22 @@ const catchWrapper = function (func) {
 	};
 };
 
-module.exports = {
+const stringWrapper = (log) => {
+	const builder =
+		(isFunction(log) ? log : null) ||
+		(isString(log) ? () => log : null) ||
+		(() => '');
+
+	return builder;
+};
+
+export {
 	nop,
 	noarr,
-	once,
 	defer,
-	catchWrapper,
 	isString,
 	isFunction,
+	onceWrapper,
+	catchWrapper,
+	stringWrapper,
 };

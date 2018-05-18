@@ -1,5 +1,4 @@
-
-const { defer, once, catchWrapper, nop } = require('./_base');
+import { defer, onceWrapper, catchWrapper, nop } from './_common';
 
 const EMPTY = function (next) { return (next || nop)(); };
 
@@ -36,7 +35,7 @@ const InOrder = function () {
 
 	const series = function (next) {
 		const args = arguments;
-		next = once(next);
+		next = onceWrapper(next);
 
 		let index = 0;
 
@@ -51,7 +50,7 @@ const InOrder = function () {
 				next.apply(undefined, args);
 			} else {
 				const handler = catchWrapper(handlers[index++])
-					.bind(undefined, once(worker));
+					.bind(undefined, onceWrapper(worker));
 
 				args[0] = handler;
 				args.length = args.length || 1;
@@ -66,4 +65,4 @@ const InOrder = function () {
 	return series;
 };
 
-module.exports = InOrder;
+export default InOrder;

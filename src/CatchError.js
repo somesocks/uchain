@@ -1,5 +1,4 @@
-
-const { catchWrapper, nop, noarr } = require('./_base');
+import { catchWrapper, nop, noarr } from './_common';
 
 /**
 * Errors bypass the normal flow of execution.  They're always returned to the last link in the chain, even if they occur inside nested InSeries or InParallel chains.
@@ -55,4 +54,4 @@ const CatchError = (task) => {
 	};
 };
 
-module.exports = CatchError;
+export default CatchError;

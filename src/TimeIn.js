@@ -1,9 +1,9 @@
 
-const { defer, once, catchWrapper, nop, noarr } = require('./_base');
+import { defer, onceWrapper, catchWrapper, nop, noarr } from './_common';
 
-const PassThrough = require('./PassThrough');
-const InSeries = require('./InSeries');
-const InParallel = require('./InParallel');
+import PassThrough from './PassThrough';
+import InSeries from './InSeries';
+import InParallel from './InParallel';
 
 /**
 *

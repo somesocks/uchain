@@ -30,6 +30,6 @@
 * @returns {function} a function that generates a Promise when called
 * @memberof uchain
 */
-const ToPromise = require('./Promisify');
+import ToPromise from './Promisify';
 
-module.exports = ToPromise;
+export default ToPromise;

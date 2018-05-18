@@ -1,8 +1,8 @@
 
-const { nop, noarr } = require('./_base');
+import { nop, noarr } from './_common';
 
-const InSeries = require('./InSeries');
-const InParallel = require('./InParallel');
+import InSeries from './InSeries';
+import InParallel from './InParallel';
 
 /**
 * Builds a task wrapper that calls a task once on each of its arguments in parallel
@@ -24,4 +24,4 @@ const ParallelForEach = (toCall) => (next, ...args) => {
 	)(next);
 };
 
-module.exports = ParallelForEach;
+export default ParallelForEach;

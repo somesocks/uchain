@@ -1,15 +1,11 @@
 
 const path = require('path');
-const Webpack = require('webpack');
 
 const SRC_DIR = path.normalize(__dirname + '/../src');
 const DIST_DIR = path.normalize(__dirname + '/../dist');
 
-const plugins = [
-	// new Webpack.optimize.UglifyJsPlugin({ mangle: true, compress: {}, output: { comments: false } }),
-];
-
 const CONFIG = {
+	mode: 'development',
 	entry: {
 		'uchain': [ './src/index.js' ],
 	},
@@ -18,13 +14,14 @@ const CONFIG = {
 		filename: '[name].js',
 		library: '[name]',
 		libraryTarget: 'umd',
+		globalObject: 'this',
 	},
 	module: {
-		loaders: [
+		rules: [
 			{
 				test: /\.js$/,
 				exclude: /node_modules/,
-				loader: 'babel',
+				loader: 'babel-loader',
 				query: {
 					presets: [ 'es2015' ],
 				},
@@ -32,15 +29,12 @@ const CONFIG = {
 		],
 	},
 	resolve: {
-		extensions: [ '', '.js' ],
-		root: [ SRC_DIR ],
+		extensions: [ '.js' ],
+		modules: [ SRC_DIR, 'node_modules' ],
 	},
 	stats: {
-		color: true,
-		children: false,
-		chunkModules: false,
+		colors: true,
 	},
-	plugins,
 };
 
 

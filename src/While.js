@@ -1,7 +1,7 @@
 
-const { once, catchWrapper, noarr } = require('./_base');
+import { onceWrapper, catchWrapper, noarr } from './_common';
 
-const PassThrough = require('./PassThrough');
+import PassThrough from './PassThrough';
 
 /**
 *
@@ -37,7 +37,7 @@ const While = function (conditionTask, loopTask) {
 	loopTask = loopTask != null ? catchWrapper(loopTask) : PassThrough;
 
 	return function (next, ...args) {
-		next = next || once(next);
+		next = next || onceWrapper(next);
 		args = args || noarr;
 
 		let onCondition;
@@ -66,4 +66,4 @@ const While = function (conditionTask, loopTask) {
 	};
 };
 
-module.exports = While;
+export default While;

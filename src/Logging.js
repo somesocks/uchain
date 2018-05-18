@@ -1,5 +1,5 @@
 
-const { nop, noarr, isFunction } = require('./_base');
+import { nop, noarr, isFunction } from './_common';
 
 const DEFAULT = ((...args) => `Logging [ ${args} ]`);
 
@@ -35,4 +35,4 @@ const Logging = (...statements) => {
 	};
 };
 
-module.exports = Logging;
+export default Logging;

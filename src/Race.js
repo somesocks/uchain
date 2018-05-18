@@ -1,5 +1,5 @@
 
-const { defer, once, catchWrapper, nop, noarr } = require('./_base');
+import { defer, onceWrapper, catchWrapper, nop, noarr } from './_common';
 
 /**
 *
@@ -41,7 +41,7 @@ const Race = (...tasks) => {
 	tasks = tasks.map(catchWrapper);
 
 	return (next, ...args) => {
-		next = once(next);
+		next = onceWrapper(next);
 		args = args || noarr;
 
 		for (let i = 0; i < tasks.length; i++) {
@@ -51,4 +51,4 @@ const Race = (...tasks) => {
 	};
 };
 
-module.exports = Race;
+export default Race;

@@ -1,8 +1,8 @@
-const PassThrough = require('./PassThrough');
+import { defer, onceWrapper, catchWrapper, nop } from './_common';
 
-const { defer, once, catchWrapper, nop } = require('./_base');
+import PassThrough from './PassThrough';
 
-const Queue = require('./Queue');
+import Queue from './Queue';
 
 /**
 * Wraps a task and ensures that only X number of instances of the task can be run in parallel.
@@ -13,11 +13,11 @@ const Queue = require('./Queue');
 * @memberof uchain
 */
 const Throttle = (task = PassThrough, limit = 1) => {
-	const queue = new Queue();
+	const queue = new Throttle.Queue();
 	let running = 0;
 
 	const throttle = (next, ...rest) => {
-		next = once(next);
+		next = onceWrapper(next);
 
 		const after = (...results) => {
 			running--;
@@ -40,4 +40,6 @@ const Throttle = (task = PassThrough, limit = 1) => {
 	return throttle;
 };
 
-module.exports = Throttle;
+Throttle.Queue = Queue;
+
+export default Throttle;

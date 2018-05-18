@@ -1,5 +1,4 @@
-
-const { defer, once, catchWrapper, nop } = require('./_base');
+import { defer, onceWrapper, catchWrapper, nop } from './_common';
 
 const EMPTY = function (next) { return (next || nop)(); };
 
@@ -43,7 +42,7 @@ const InParallel = function () {
 
 	const parallel = function (next) {
 		const args = arguments;
-		next = once(next);
+		next = onceWrapper(next);
 
 		const results = Array(handlers.length + 1);
 		let done = 0;
@@ -62,7 +61,7 @@ const InParallel = function () {
 			};
 
 			const handler = catchWrapper(handlers[i])
-				.bind(undefined, once(onDone));
+				.bind(undefined, onceWrapper(onDone));
 
 			args[0] = handler;
 			args.length = args.length > 1 ? args.length : 1;
@@ -75,4 +74,4 @@ const InParallel = function () {
 };
 
 
-module.exports = InParallel;
+export default InParallel;
