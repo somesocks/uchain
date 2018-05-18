@@ -1,8 +1,8 @@
 
-const { defer, once, catchWrapper, nop, noarr } = require('./_base');
+import { defer, onceWrapper, catchWrapper, nop, noarr } from './_common';
 
-const Race = require('./Race');
-const PassThrough = require('./PassThrough');
+import Race from './Race';
+import PassThrough from './PassThrough';
 
 /**
 *
@@ -31,4 +31,4 @@ const TimeOut = (task = PassThrough, ms = 1000) => Race(
 	task
 );
 
-module.exports = TimeOut;
+export default TimeOut;

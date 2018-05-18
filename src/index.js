@@ -25,31 +25,72 @@
 * @returns {string} the string
 */
 
+// const {
+// 	Assert,
+// 	PassThrough,
+// 	InSeries,
+// 	InParallel,
+// } = require('./uchain');
+//
+// module.exports = {
+// 	Assert,
+// 	InSeries,
+// 	InParallel,
+// 	PassThrough,
+// };
+
+import Assert from './Assert';
+import CatchError from './CatchError';
+import FromPromise from './FromPromise';
+import If from './If';
+import InOrder from './InOrder';
+import InParallel from './InParallel';
+import InSeries from './InSeries';
+import Logging from './Logging';
+import ParallelFilter from './ParallelFilter';
+import ParallelForEach from './ParallelForEach';
+import ParallelMap from './ParallelMap';
+import ParallelObjectFilter from './ParallelObjectFilter';
+import ParallelObjectMap from './ParallelObjectMap';
+import PassThrough from './PassThrough';
+import PromiseWrapper from './PromiseWrapper';
+import Promisify from './Promisify';
+import Race from './Race';
+import Retry from './Retry';
+import Switch from './Switch';
+import Throttle from './Throttle';
+import TimeIn from './TimeIn';
+import TimeOut from './TimeOut';
+import Timer from './Timer';
+import ToPromise from './ToPromise';
+import TryCatch from './TryCatch';
+import While from './While';
+
 module.exports = {
-	Assert: require('./Assert'),
-	CatchError: require('./CatchError'),
-	FromPromise: require('./FromPromise'),
-	If: require('./If'),
-	InParallel: require('./InParallel'),
-	InSeries: require('./InSeries'),
-	InOrder: require('./InOrder'),
-	Logging: require('./Logging'),
-	ParallelFilter: require('./ParallelFilter'),
-	ParallelForEach: require('./ParallelForEach'),
-	ParallelMap: require('./ParallelMap'),
-	ParallelObjectFilter: require('./ParallelObjectFilter'),
-	ParallelObjectMap: require('./ParallelObjectMap'),
-	PassThrough: require('./PassThrough'),
-	PromiseWrapper: require('./PromiseWrapper'),
-	Promisify: require('./Promisify'),
-	Race: require('./Race'),
-	Retry: require('./Retry'),
-	Switch: require('./Switch'),
-	Throttle: require('./Throttle'),
-	TimeIn: require('TimeIn'),
-	TimeOut: require('./TimeOut'),
-	Timer: require('./Timer'),
-	ToPromise: require('./ToPromise'),
-	TryCatch: require('./TryCatch'),
-	While: require('./While'),
+	Assert,
+	CatchError,
+	FromPromise,
+	If,
+	InOrder,
+	InParallel,
+	InSeries,
+	Logging,
+	ParallelFilter,
+	ParallelForEach,
+	ParallelMap,
+	ParallelObjectFilter,
+	ParallelObjectMap,
+	PassThrough,
+	PromiseWrapper,
+	Promisify,
+	Race,
+	Retry,
+	Switch,
+	Throttle,
+	TimeIn,
+	TimeOut,
+	Timer,
+	ToPromise,
+	TryCatch,
+	While,
 };

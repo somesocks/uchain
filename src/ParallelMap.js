@@ -1,8 +1,8 @@
 
-const { nop, noarr } = require('./_base');
+import { nop, noarr } from './_common';
 
-const InSeries = require('./InSeries');
-const InParallel = require('./InParallel');
+import InSeries from './InSeries';
+import InParallel from './InParallel';
 
 /**
 * Builds a task wrapper that asynchronously maps each of its arguments to a result.
@@ -28,4 +28,4 @@ const ParallelMap = (map) => (next, ...args) => {
 };
 
 
-module.exports = ParallelMap;
+export default ParallelMap;

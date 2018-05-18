@@ -1,5 +1,5 @@
 
-const { once, nop, catchWrapper } = require('./_base');
+import { onceWrapper, nop, catchWrapper } from './_common';
 
 const EMPTY_TASK = (next) => next();
 
@@ -41,4 +41,4 @@ const Retry = function (task, options) {
 	return wrapper;
 };
 
-module.exports = Retry;
+export default Retry;

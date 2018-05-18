@@ -1,5 +1,5 @@
 
-const { once, catchWrapper } = require('./_base');
+import { onceWrapper, catchWrapper } from './_common';
 
 const EMPTY_TASK = (next) => next();
 
@@ -16,7 +16,7 @@ const Timer = function (task, label) {
 
 	const timer = function (next, ...args) {
 		const start = Date.now();
-		next = once(next);
+		next = onceWrapper(next);
 
 		const done = (err, ...rest) => {
 			const end = Date.now();
@@ -34,4 +34,4 @@ const Timer = function (task, label) {
 	return timer;
 };
 
-module.exports = Timer;
+export default Timer;

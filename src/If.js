@@ -1,7 +1,6 @@
+import { noarr, onceWrapper, catchWrapper } from './_common';
 
-const { once, catchWrapper, noarr } = require('./_base');
-
-const PassThrough = require('./PassThrough');
+import PassThrough from './PassThrough';
 
 /**
 *
@@ -42,7 +41,7 @@ const If = function (conditionTask, thenTask, elseTask) {
 	elseTask = elseTask != null ? catchWrapper(elseTask) : PassThrough;
 
 	return function (next, ...args) {
-		next = next || once(next);
+		next = next || onceWrapper(next);
 		args = args || noarr;
 
 		const onCondition = function (err, res) {
@@ -58,4 +57,4 @@ const If = function (conditionTask, thenTask, elseTask) {
 	};
 };
 
-module.exports = If;
+export default If;

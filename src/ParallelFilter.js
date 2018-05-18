@@ -1,8 +1,9 @@
 
-const { nop, noarr } = require('./_base');
+import { nop, noarr } from './_common';
 
-const InSeries = require('./InSeries');
-const ParallelMap = require('./ParallelMap');
+import InSeries from './InSeries';
+
+import ParallelMap from './ParallelMap';
 
 /**
 * Builds a task that filters all of its arguments in parallel, and returns the results
@@ -24,4 +25,4 @@ const ParallelFilter = (filter) => (next, ...args) => {
 	)(next);
 };
 
-module.exports = ParallelFilter;
+export default ParallelFilter;

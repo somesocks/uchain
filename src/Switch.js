@@ -1,7 +1,7 @@
 
-const { once, catchWrapper, noarr } = require('./_base');
+import { onceWrapper, catchWrapper, noarr } from './_common';
 
-const PassThrough = require('./PassThrough');
+import PassThrough from './PassThrough';
 
 /**
 * Switch accepts a lookup task and a map.
@@ -15,7 +15,7 @@ const Switch = function (lookupTask, caseMap) {
 	caseMap = caseMap || {};
 
 	return function (next, ...args) {
-		next = next || once(next);
+		next = next || onceWrapper(next);
 		args = args || noarr;
 
 		const onLookup = function (err, key) {
@@ -32,4 +32,4 @@ const Switch = function (lookupTask, caseMap) {
 	};
 };
 
-module.exports = Switch;
+export default Switch;

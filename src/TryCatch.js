@@ -1,5 +1,5 @@
 
-const { catchWrapper, nop, noarr } = require('./_base');
+import { catchWrapper, nop, noarr } from './_common';
 
 const DEFAULT_TRY = (next, ...args) => next(null, ...args);
 
@@ -78,4 +78,4 @@ const TryCatch = (_try, _catch, _finally) => {
 	return wrapper;
 };
 
-module.exports = TryCatch;
+export default TryCatch;

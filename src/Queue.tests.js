@@ -1,5 +1,7 @@
 /* eslint-env mocha */
-const Queue = require('./Queue');
+
+const { Throttle } = require('../dist');
+const { Queue } = Throttle;
 
 const { assert } = require('chai');
 

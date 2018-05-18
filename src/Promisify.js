@@ -1,6 +1,6 @@
 
-const { catchWrapper } = require('./_base');
-const PassThrough = require('./PassThrough');
+import { catchWrapper } from './_common';
+import PassThrough from './PassThrough';
 
 /**
 * ```javascript
@@ -57,4 +57,4 @@ const Promisify = (task) => {
 	return taskWrapper;
 };
 
-module.exports = Promisify;
+export default Promisify;

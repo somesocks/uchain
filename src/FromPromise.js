@@ -19,6 +19,6 @@
 * @returns {taskFunction} a task that wraps around the promise
 * @memberof uchain
 */
-const FromPromise = require('./PromiseWrapper');
+import FromPromise from './PromiseWrapper';
 
-module.exports = FromPromise;
+export default FromPromise;

@@ -1,14 +1,4 @@
-
-const { nop, noarr, catchWrapper, isFunction, isString } = require('./_base');
-
-const stringBuilder = (log) => {
-	const builder =
-		(isFunction(log) ? log : null) ||
-		(isString(log) ? () => log : null) ||
-		(() => '');
-
-	return builder;
-};
+import { nop, noarr, catchWrapper, stringWrapper } from './_common';
 
 /**
 * Builds an async assertion task.  When called, if the arguments do not match the validator functions,
@@ -21,7 +11,7 @@ const stringBuilder = (log) => {
 const Assert = (validator, message) => {
 	validator = validator || nop;
 	message = message || 'uchain assert failed';
-	message = stringBuilder(message);
+	message = stringWrapper(message);
 
 	return catchWrapper(
 		(next, ...args) => {
@@ -33,4 +23,4 @@ const Assert = (validator, message) => {
 	);
 };
 
-module.exports = Assert;
+export default Assert;
