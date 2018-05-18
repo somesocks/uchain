@@ -1,5 +1,6 @@
 
-import { nop, noarr } from './_common';
+import _noarr from './_noarr';
+import _nop from './_nop';
 
 import InSeries from './InSeries';
 import InParallel from './InParallel';
@@ -12,15 +13,15 @@ import InParallel from './InParallel';
 * @memberof uchain
 */
 const ParallelMap = (map) => (next, ...args) => {
-	next = next || nop;
-	args = args || noarr;
+	next = next || _nop;
+	args = args || _noarr;
 
 	const tasks = args.map((arg, i) => (next) => map(next, arg, i));
 
 	InSeries(
 		InParallel(...tasks),
 		(next, ...results) => {
-			results = results || noarr;
+			results = results || _noarr;
 			results = results.map((r) => r[0]);
 			next(null, ...results);
 		}

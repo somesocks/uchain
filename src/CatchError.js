@@ -1,4 +1,7 @@
-import { catchWrapper, nop, noarr } from './_common';
+
+import _catchWrapper from './_catchWrapper';
+import _nop from './_nop';
+import _noarr from './_noarr';
 
 /**
 * Errors bypass the normal flow of execution.  They're always returned to the last link in the chain, even if they occur inside nested InSeries or InParallel chains.
@@ -41,14 +44,14 @@ import { catchWrapper, nop, noarr } from './_common';
 * @memberof uchain
 */
 const CatchError = (task) => {
-	task = catchWrapper(task);
+	task = _catchWrapper(task);
 
 	return (next, ...args) => {
-		next = next || nop;
-		args = args || noarr;
+		next = next || _nop;
+		args = args || _noarr;
 
 		task(
-			(...a) => next(null, ...(a || noarr)),
+			(...a) => next(null, ...(a || _noarr)),
 			...args
 		);
 	};

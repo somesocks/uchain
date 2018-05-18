@@ -1,8 +1,9 @@
-import { defer, onceWrapper, catchWrapper, nop } from './_common';
+
+import _catchWrapper from './_catchWrapper';
+import _onceWrapper from './_onceWrapper';
+import Queue from './_queue';
 
 import PassThrough from './PassThrough';
-
-import Queue from './Queue';
 
 /**
 * Wraps a task and ensures that only X number of instances of the task can be run in parallel.
@@ -17,7 +18,7 @@ const Throttle = (task = PassThrough, limit = 1) => {
 	let running = 0;
 
 	const throttle = (next, ...rest) => {
-		next = onceWrapper(next);
+		next = _onceWrapper(next);
 
 		const after = (...results) => {
 			running--;

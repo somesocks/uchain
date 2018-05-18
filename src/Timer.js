@@ -1,5 +1,6 @@
 
-import { onceWrapper, catchWrapper } from './_common';
+import _catchWrapper from './_catchWrapper';
+import _onceWrapper from './_onceWrapper';
 
 const EMPTY_TASK = (next) => next();
 
@@ -11,12 +12,12 @@ const EMPTY_TASK = (next) => next();
 * @memberof uchain
 */
 const Timer = function (task, label) {
-	task = catchWrapper(task || EMPTY_TASK);
+	task = _catchWrapper(task || EMPTY_TASK);
 	label = label || task.name || 'task';
 
 	const timer = function (next, ...args) {
 		const start = Date.now();
-		next = onceWrapper(next);
+		next = _onceWrapper(next);
 
 		const done = (err, ...rest) => {
 			const end = Date.now();

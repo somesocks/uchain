@@ -1,6 +1,4 @@
 
-import { defer, onceWrapper, catchWrapper, nop, noarr } from './_common';
-
 import PassThrough from './PassThrough';
 import InSeries from './InSeries';
 import InParallel from './InParallel';

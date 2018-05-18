@@ -1,4 +1,7 @@
-import { noarr, onceWrapper, catchWrapper } from './_common';
+
+import _catchWrapper from './_catchWrapper';
+import _noarr from './_noarr';
+import _onceWrapper from './_onceWrapper';
 
 import PassThrough from './PassThrough';
 
@@ -36,13 +39,13 @@ import PassThrough from './PassThrough';
 * @memberof uchain
 */
 const If = function (conditionTask, thenTask, elseTask) {
-	conditionTask = conditionTask != null ? catchWrapper(conditionTask) : PassThrough;
-	thenTask = thenTask != null ? catchWrapper(thenTask) : PassThrough;
-	elseTask = elseTask != null ? catchWrapper(elseTask) : PassThrough;
+	conditionTask = conditionTask != null ? _catchWrapper(conditionTask) : PassThrough;
+	thenTask = thenTask != null ? _catchWrapper(thenTask) : PassThrough;
+	elseTask = elseTask != null ? _catchWrapper(elseTask) : PassThrough;
 
 	return function (next, ...args) {
-		next = next || onceWrapper(next);
-		args = args || noarr;
+		next = next || _onceWrapper(next);
+		args = args || _noarr;
 
 		const onCondition = function (err, res) {
 			if (err) {

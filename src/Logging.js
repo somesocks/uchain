@@ -1,5 +1,7 @@
 
-import { nop, noarr, isFunction } from './_common';
+import isFunction from './_isFunction';
+import _noarr from './_noarr';
+import _nop from './_nop';
 
 const DEFAULT = ((...args) => `Logging [ ${args} ]`);
 
@@ -23,8 +25,8 @@ const Logging = (...statements) => {
 	statements = statements.map(logWrapper);
 
 	return (next, ...args) => {
-		args = args || noarr;
-		next = next || nop;
+		args = args || _noarr;
+		next = next || _nop;
 
 		const log = statements
 			.map(s => s(...args));

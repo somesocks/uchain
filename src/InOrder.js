@@ -1,6 +1,10 @@
-import { defer, onceWrapper, catchWrapper, nop } from './_common';
 
-const EMPTY = function (next) { return (next || nop)(); };
+import _catchWrapper from './_catchWrapper';
+import _defer from './_defer';
+import _nop from './_nop';
+import _onceWrapper from './_onceWrapper';
+
+const EMPTY = function (next) { return (next || _nop)(); };
 
 /**
 * ```javascript
@@ -35,7 +39,7 @@ const InOrder = function () {
 
 	const series = function (next) {
 		const args = arguments;
-		next = onceWrapper(next);
+		next = _onceWrapper(next);
 
 		let index = 0;
 
@@ -49,12 +53,12 @@ const InOrder = function () {
 				args[0] = undefined;
 				next.apply(undefined, args);
 			} else {
-				const handler = catchWrapper(handlers[index++])
-					.bind(undefined, onceWrapper(worker));
+				const handler = _catchWrapper(handlers[index++])
+					.bind(undefined, _onceWrapper(worker));
 
 				args[0] = handler;
 				args.length = args.length || 1;
-				defer.apply(undefined, args);
+				_defer.apply(undefined, args);
 			}
 		};
 

@@ -1,5 +1,5 @@
 
-import { catchWrapper } from './_common';
+import _catchWrapper from './_catchWrapper';
 import PassThrough from './PassThrough';
 
 /**
@@ -35,7 +35,7 @@ const Promisify = (task) => {
 	if (task == null) {
 		return PassThrough;
 	} else {
-		task = catchWrapper(task);
+		task = _catchWrapper(task);
 	}
 
 	const taskWrapper = function (...args) {

@@ -1,5 +1,6 @@
 
-import { nop, noarr } from './_common';
+import _noarr from './_noarr';
+import _nop from './_nop';
 
 import InSeries from './InSeries';
 
@@ -12,13 +13,13 @@ import ParallelMap from './ParallelMap';
 * @memberof uchain
 */
 const ParallelFilter = (filter) => (next, ...args) => {
-	next = next || nop;
-	args = args || noarr;
+	next = next || _nop;
+	args = args || _noarr;
 
 	InSeries(
 		ParallelMap(filter),
 		(next, ...booleans) => {
-			booleans = booleans || noarr;
+			booleans = booleans || _noarr;
 			const results = args.filter((r, i) => booleans[i]);
 			next(null, ...results);
 		}

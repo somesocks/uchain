@@ -1,11 +1,11 @@
 
-import { catchWrapper, nop, noarr } from './_common';
+import _catchWrapper from './_catchWrapper';
 
 const DEFAULT_TRY = (next, ...args) => next(null, ...args);
 
-const DEFAULT_CATCH = (next, err, ...args) => next(err, ...args);
+const DEFAULT_catchWrapper = (next, err, ...args) => next(err, ...args);
 
-const DEFAULT_FINALLY = (next, err, ...args) => next(err, ...args);
+const DEFAULTfinallyTask = (next, err, ...args) => next(err, ...args);
 
 /**
 * Errors bypass the normal flow of execution.  They always return to the last link in the chain, even if they occur inside nested InSeries or InParallel chains.
@@ -44,35 +44,35 @@ const DEFAULT_FINALLY = (next, err, ...args) => next(err, ...args);
 * ```
 *
 * @param {taskFunction} _try
-* @param {taskFunction} _catch
-* @param {taskFunction} _finally
+* @param {taskFunction} _catchWrapper
+* @param {taskFunction} finallyTask
 * @returns {taskFunction}
 * @memberof uchain
 */
-const TryCatch = (_try, _catch, _finally) => {
-	_try = _try || DEFAULT_TRY;
-	_try = catchWrapper(_try);
+const TryCatch = (tryTask, catchTask, finallyTask) => {
+	tryTask = tryTask || DEFAULT_TRY;
+	tryTask = _catchWrapper(tryTask);
 
-	_catch = _catch || DEFAULT_CATCH;
-	_catch = catchWrapper(_catch);
+	catchTask = catchTask || DEFAULT_catchWrapper;
+	catchTask = _catchWrapper(catchTask);
 
-	_finally = _finally || DEFAULT_FINALLY;
-	_finally = catchWrapper(_finally);
+	finallyTask = finallyTask || DEFAULTfinallyTask;
+	finallyTask = _catchWrapper(finallyTask);
 
 	const wrapper = function (next, ...args) {
 		const onCatch = function (err, ...res) {
-			_finally(next, err, ...res);
+			finallyTask(next, err, ...res);
 		};
 
 		const onTry = function (err, ...res) {
 			if (err) {
-				_catch(onCatch, err, ...res);
+				catchTask(onCatch, err, ...res);
 			} else {
-				_finally(next, err, ...res);
+				finallyTask(next, err, ...res);
 			}
 		};
 
-		_try(onTry, ...args);
+		tryTask(onTry, ...args);
 	};
 
 	return wrapper;

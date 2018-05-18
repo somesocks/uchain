@@ -1,6 +1,4 @@
 
-import { defer, onceWrapper, catchWrapper, nop, noarr } from './_common';
-
 import Race from './Race';
 import PassThrough from './PassThrough';
 

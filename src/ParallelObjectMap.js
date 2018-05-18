@@ -1,5 +1,7 @@
 
-import { defer, onceWrapper, catchWrapper } from './_common';
+import _catchWrapper from './_catchWrapper';
+import _defer from './_defer';
+import _onceWrapper from './_onceWrapper';
 
 /**
 * Similar to ParallelMap, but instead of running on an array of arguments, it runs a filter on every key-value pair in an object.
@@ -8,10 +10,10 @@ import { defer, onceWrapper, catchWrapper } from './_common';
 * @memberof uchain
 */
 const ParallelObjectMap = (mapping) => {
-	mapping = catchWrapper(mapping);
+	mapping = _catchWrapper(mapping);
 
 	return (next, obj) => {
-		next = onceWrapper(next);
+		next = _onceWrapper(next);
 
 		let left = 0;
 		const results = {};
@@ -33,7 +35,7 @@ const ParallelObjectMap = (mapping) => {
 					}
 				};
 
-				defer(mapping, onceWrapper(onDone), key, val);
+				_defer(mapping, _onceWrapper(onDone), key, val);
 			}
 		}
 

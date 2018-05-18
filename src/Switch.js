@@ -1,5 +1,7 @@
 
-import { onceWrapper, catchWrapper, noarr } from './_common';
+import _catchWrapper from './_catchWrapper';
+import _noarr from './_noarr';
+import _onceWrapper from './_onceWrapper';
 
 import PassThrough from './PassThrough';
 
@@ -11,12 +13,12 @@ import PassThrough from './PassThrough';
 * @memberof uchain
 */
 const Switch = function (lookupTask, caseMap) {
-	lookupTask = lookupTask != null ? catchWrapper(lookupTask) : (next) => next();
+	lookupTask = lookupTask != null ? _catchWrapper(lookupTask) : (next) => next();
 	caseMap = caseMap || {};
 
 	return function (next, ...args) {
-		next = next || onceWrapper(next);
-		args = args || noarr;
+		next = next || _onceWrapper(next);
+		args = args || _noarr;
 
 		const onLookup = function (err, key) {
 			if (err) {

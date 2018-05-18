@@ -1,5 +1,6 @@
 
-import { nop, noarr } from './_common';
+import _noarr from './_noarr';
+import _nop from './_nop';
 
 import InSeries from './InSeries';
 import InParallel from './InParallel';
@@ -11,8 +12,8 @@ import InParallel from './InParallel';
 * @memberof uchain
 */
 const ParallelForEach = (toCall) => (next, ...args) => {
-	next = next || nop;
-	args = args || noarr;
+	next = next || _nop;
+	args = args || _noarr;
 
 	const tasks = args.map((arg) => (next) => toCall(next, arg));
 

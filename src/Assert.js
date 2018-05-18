@@ -1,4 +1,8 @@
-import { nop, noarr, catchWrapper, stringWrapper } from './_common';
+
+import _catchWrapper from './_catchWrapper';
+import _nop from './_nop';
+import _noarr from './_noarr';
+import _stringWrapper from './_stringWrapper';
 
 /**
 * Builds an async assertion task.  When called, if the arguments do not match the validator functions,
@@ -9,14 +13,14 @@ import { nop, noarr, catchWrapper, stringWrapper } from './_common';
 * @memberof uchain
 */
 const Assert = (validator, message) => {
-	validator = validator || nop;
+	validator = validator || _nop;
 	message = message || 'uchain assert failed';
-	message = stringWrapper(message);
+	message = _stringWrapper(message);
 
-	return catchWrapper(
+	return _catchWrapper(
 		(next, ...args) => {
-			next = next || nop;
-			args = args || noarr;
+			next = next || _nop;
+			args = args || _noarr;
 			const err = validator(...args) ? null : new Error(message(...args));
 			next(err, ...args);
 		}

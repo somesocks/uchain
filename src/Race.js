@@ -1,5 +1,9 @@
 
-import { defer, onceWrapper, catchWrapper, nop, noarr } from './_common';
+import _catchWrapper from './_catchWrapper';
+import _defer from './_defer';
+import _noarr from './_noarr';
+import _nop from './_nop';
+import _onceWrapper from './_onceWrapper';
 
 /**
 *
@@ -32,21 +36,21 @@ import { defer, onceWrapper, catchWrapper, nop, noarr } from './_common';
 * @memberof uchain
 */
 const Race = (...tasks) => {
-	tasks = tasks || noarr;
+	tasks = tasks || _noarr;
 
 	if (tasks.length === 0) {
-		return (next) => (next || nop)();
+		return (next) => (next || _nop)();
 	}
 
-	tasks = tasks.map(catchWrapper);
+	tasks = tasks.map(_catchWrapper);
 
 	return (next, ...args) => {
-		next = onceWrapper(next);
-		args = args || noarr;
+		next = _onceWrapper(next);
+		args = args || _noarr;
 
 		for (let i = 0; i < tasks.length; i++) {
 			const task = tasks[i];
-			defer(task, next, ...args);
+			_defer(task, next, ...args);
 		}
 	};
 };

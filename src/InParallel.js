@@ -1,6 +1,11 @@
-import { defer, onceWrapper, catchWrapper, nop } from './_common';
 
-const EMPTY = function (next) { return (next || nop)(); };
+import _catchWrapper from './_catchWrapper';
+import _defer from './_defer';
+import _nop from './_nop';
+import _onceWrapper from './_onceWrapper';
+
+
+const EMPTY = function (next) { return (next || _nop)(); };
 
 /**
 *
@@ -42,7 +47,7 @@ const InParallel = function () {
 
 	const parallel = function (next) {
 		const args = arguments;
-		next = onceWrapper(next);
+		next = _onceWrapper(next);
 
 		const results = Array(handlers.length + 1);
 		let done = 0;
@@ -60,13 +65,13 @@ const InParallel = function () {
 				}
 			};
 
-			const handler = catchWrapper(handlers[i])
-				.bind(undefined, onceWrapper(onDone));
+			const handler = _catchWrapper(handlers[i])
+				.bind(undefined, _onceWrapper(onDone));
 
 			args[0] = handler;
 			args.length = args.length > 1 ? args.length : 1;
 
-			defer.apply(undefined, args);
+			_defer.apply(undefined, args);
 		}
 	};
 

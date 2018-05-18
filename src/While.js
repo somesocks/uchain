@@ -1,5 +1,7 @@
 
-import { onceWrapper, catchWrapper, noarr } from './_common';
+import _catchWrapper from './_catchWrapper';
+import _noarr from './_noarr';
+import _onceWrapper from './_onceWrapper';
 
 import PassThrough from './PassThrough';
 
@@ -33,12 +35,12 @@ import PassThrough from './PassThrough';
 * @memberof uchain
 */
 const While = function (conditionTask, loopTask) {
-	conditionTask = conditionTask != null ? catchWrapper(conditionTask) : (next) => next(null, false);
-	loopTask = loopTask != null ? catchWrapper(loopTask) : PassThrough;
+	conditionTask = conditionTask != null ? _catchWrapper(conditionTask) : (next) => next(null, false);
+	loopTask = loopTask != null ? _catchWrapper(loopTask) : PassThrough;
 
 	return function (next, ...args) {
-		next = next || onceWrapper(next);
-		args = args || noarr;
+		next = next || _onceWrapper(next);
+		args = args || _noarr;
 
 		let onCondition;
 		let onLoop;

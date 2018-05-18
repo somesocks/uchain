@@ -1,5 +1,5 @@
 
-import { nop } from './_common';
+import _nop from './_nop';
 
 /**
 *
@@ -11,7 +11,7 @@ import { nop } from './_common';
 */
 const PassThrough = function (next) {
 	const args = arguments;
-	next = next || nop;
+	next = next || _nop;
 	args[0] = undefined;
 	next.apply(undefined, args);
 };

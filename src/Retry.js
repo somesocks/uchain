@@ -1,5 +1,6 @@
 
-import { onceWrapper, nop, catchWrapper } from './_common';
+import _catchWrapper from './_catchWrapper';
+import _nop from './_nop';
 
 const EMPTY_TASK = (next) => next();
 
@@ -13,13 +14,13 @@ const EMPTY_TASK = (next) => next();
 * @memberof uchain
 */
 const Retry = function (task, options) {
-	task = catchWrapper(task || EMPTY_TASK);
+	task = _catchWrapper(task || EMPTY_TASK);
 	options = options || {};
 	options.timeout = 8192;
 	options.retries = 8;
 
 	const wrapper = function (next, ...args) {
-		next = next || nop;
+		next = next || _nop;
 
 		const timeStarted = Date.now();
 		let retries = 0;

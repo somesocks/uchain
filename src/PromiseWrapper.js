@@ -1,5 +1,5 @@
 
-import { catchWrapper } from './_common';
+import _catchWrapper from './_catchWrapper';
 import PassThrough from './PassThrough';
 
 /**
@@ -35,7 +35,7 @@ const PromiseWrapper = (promiseGenerator) => {
 			);
 	};
 
-	return catchWrapper(promiseWrapper);
+	return _catchWrapper(promiseWrapper);
 };
 
 export default PromiseWrapper;
